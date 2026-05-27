@@ -1205,7 +1205,10 @@ function mergeWithDefaults(user) {
         hidden: usr?.hidden || false,
         note: usr?.note ?? "",
         time: usr?.time ?? def.time,
-        name: usr?.name ?? def.name
+        name: usr?.name ?? def.name,
+        transport: usr?.transport ?? def.transport,
+        search: usr?.search ?? def.search,
+        highlight: usr?.highlight ?? def.highlight
       };
     }).filter(Boolean);
   }
