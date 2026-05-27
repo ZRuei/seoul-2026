@@ -94,9 +94,9 @@ nav.day-tabs::-webkit-scrollbar { display: none; }
   flex: 0 0 auto;
   border: none; background: transparent;
   padding: 12px 14px 14px;
-  font-family: "Inter", sans-serif;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--ink-mute); cursor: pointer;
   white-space: nowrap;
   transition: color 300ms ease;
@@ -237,9 +237,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
   display: flex; gap: 18px; flex-wrap: wrap;
 }
 .link-naver, .link-note {
-  font-family: "Inter", sans-serif;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--ink);
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--ink);
   border: none; background: transparent; padding: 0;
   cursor: pointer; text-decoration: none;
   transition: color 300ms ease;
@@ -297,9 +297,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
   padding: 14px; background: transparent;
   border: none; border-top: 1px solid var(--line);
   color: var(--ink-mute);
-  font-family: "Inter", sans-serif;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.02em;
   cursor: pointer; transition: color 300ms ease;
 }
 .add-btn:hover { color: var(--accent); }
@@ -326,9 +326,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
 .modal-backdrop.show .modal { transform: translateY(0); }
 
 .modal h2 {
-  font-family: "Inter", sans-serif;
-  font-size: 13px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.02em;
   margin: 4px 0 18px;
   display: flex; justify-content: space-between; align-items: center;
   color: var(--ink);
@@ -344,9 +344,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
 
 .field { margin-bottom: 16px; }
 .field label {
-  display: block; font-family: "Inter", sans-serif;
-  font-size: 10px; color: var(--ink-mute);
-  letter-spacing: 0.08em; text-transform: uppercase;
+  display: block; font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 12px; color: var(--ink-mute);
+  letter-spacing: 0.02em;
   margin-bottom: 6px; font-weight: 700;
 }
 .field input, .field textarea, .field select {
@@ -369,9 +369,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
 .btn-row button {
   flex: 1; padding: 12px;
   border-radius: 0; border: 1px solid var(--line);
-  font-family: "Inter", sans-serif;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.02em;
   cursor: pointer; background: transparent;
   color: var(--ink);
   transition: all 300ms ease;
@@ -416,10 +416,10 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
 }
 .settings-section:last-child { border-bottom: none; }
 .settings-section h3 {
-  font-family: "Inter", sans-serif;
-  font-size: 10px; color: var(--ink-mute);
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 12px; color: var(--ink-mute);
   margin: 0 0 12px;
-  text-transform: uppercase; letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
   font-weight: 700;
 }
 .kv {
@@ -458,9 +458,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
   bottom: calc(80px + env(safe-area-inset-bottom));
   background: var(--ink); color: white;
   padding: 10px 20px; border-radius: 0;
-  font-family: "Inter", sans-serif;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.02em;
   opacity: 0; transition: opacity 200ms ease;
   z-index: 200; pointer-events: none; max-width: 90%;
 }
@@ -477,7 +477,7 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
   position: fixed; bottom: 0; left: 0; right: 0;
   background: var(--surface);
   border-top: 1px solid var(--line);
-  display: flex; z-index: 60;
+  display: flex; z-index: 1000;
   padding-bottom: env(safe-area-inset-bottom);
 }
 .bottom-nav button {
@@ -498,8 +498,8 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
   background: var(--accent);
 }
 .bottom-nav button .nlabel {
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 /* hide day tabs on non-itinerary views */
@@ -536,9 +536,9 @@ body[data-view="map"] nav.day-tabs { display: none; }
 .weather-card .w-text { font-size: 13px; color: var(--ink); font-weight: 400; }
 .weather-card .w-pop { font-size: 12px; color: var(--ink-mute); font-weight: 300; }
 .weather-card .w-warn-tag {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
   padding: 2px 8px; border: 1px solid var(--warn);
-  color: var(--warn); text-transform: uppercase;
+  color: var(--warn);
 }
 .weather-card .w-meta {
   margin-top: 10px; display: flex; gap: 16px; align-items: center;
@@ -582,9 +582,9 @@ body[data-view="map"] nav.day-tabs { display: none; }
 }
 .pack-cat-head {
   padding: 0 0 12px 0;
-  font-family: "Inter", sans-serif;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.02em;
   color: var(--ink);
   display: flex; justify-content: space-between; align-items: center;
   cursor: pointer; user-select: none;
@@ -664,9 +664,9 @@ body[data-view="map"] nav.day-tabs { display: none; }
 .pack-add button {
   padding: 0 12px; background: transparent;
   color: var(--ink); border: 1px solid var(--line);
-  border-radius: 0; font-size: 11px; font-weight: 700;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  cursor: pointer; font-family: "Inter", sans-serif;
+  border-radius: 0; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer; font-family: "Inter", "Noto Sans TC", sans-serif;
   transition: all 300ms ease;
 }
 .pack-add button:hover {
@@ -689,10 +689,9 @@ body[data-view="map"] nav.day-tabs { display: none; }
   border: none; border-radius: 0;
   background: transparent;
   color: var(--ink-mute);
-  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
   cursor: pointer; white-space: nowrap;
-  font-family: "Inter", sans-serif;
-  text-transform: uppercase;
+  font-family: "Inter", "Noto Sans TC", sans-serif;
   position: relative;
   transition: color 300ms ease;
 }
@@ -706,9 +705,10 @@ body[data-view="map"] nav.day-tabs { display: none; }
 .map-day-chip.all.active::after { background: var(--accent); }
 
 #leaflet-map {
-  height: calc(100vh - 240px); min-height: 380px;
+  height: calc(100vh - 300px); min-height: 260px;
   border: 1px solid var(--line);
   border-radius: 0; overflow: hidden;
+  position: relative; z-index: 0;
 }
 .leaflet-popup-content { font-family: inherit; font-size: 13px; }
 .leaflet-popup-content b { display: block; margin-bottom: 4px; font-weight: 700; }
@@ -722,8 +722,8 @@ body[data-view="map"] nav.day-tabs { display: none; }
 }
 .leaflet-popup-content a {
   color: var(--ink); font-weight: 700;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  font-size: 11px; text-decoration: none;
+  letter-spacing: 0.02em;
+  font-size: 12px; text-decoration: none;
   transition: color 300ms ease;
 }
 .leaflet-popup-content a:hover { color: var(--accent); }
@@ -732,9 +732,9 @@ body[data-view="map"] nav.day-tabs { display: none; }
   display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px;
   padding: 12px 0; background: transparent;
   border-top: 1px solid var(--line);
-  font-size: 10px; color: var(--ink-mute);
-  font-family: "Inter", sans-serif;
-  letter-spacing: 0.06em; text-transform: uppercase;
+  font-size: 11px; color: var(--ink-mute);
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  letter-spacing: 0.02em;
 }
 .map-legend .dot {
   display: inline-block; width: 8px; height: 8px;
@@ -843,9 +843,9 @@ body[data-view="map"] nav.day-tabs { display: none; }
 </main>
 
 <nav class="bottom-nav">
-  <button data-view="itinerary" class="active"><svg class="icon icon-md"><use href="#i-calendar"/></svg><span class="nlabel">Itinerary</span></button>
-  <button data-view="packing"><svg class="icon icon-md"><use href="#i-backpack"/></svg><span class="nlabel">Packing</span></button>
-  <button data-view="map"><svg class="icon icon-md"><use href="#i-map"/></svg><span class="nlabel">Map</span></button>
+  <button data-view="itinerary" class="active"><svg class="icon icon-md"><use href="#i-calendar"/></svg><span class="nlabel">行程</span></button>
+  <button data-view="packing"><svg class="icon icon-md"><use href="#i-backpack"/></svg><span class="nlabel">行李</span></button>
+  <button data-view="map"><svg class="icon icon-md"><use href="#i-map"/></svg><span class="nlabel">地圖</span></button>
 </nav>
 
 <div class="modal-backdrop" id="modal"><div class="modal" id="modal-content"></div></div>
@@ -1423,7 +1423,7 @@ function renderActiveDay() {
     <div id="weather-slot"></div>
     <div class="day-summary">${escapeHtml(day.summary)}</div>
     <div class="cards" id="cards"></div>
-    <button class="add-btn" id="add-btn">+ ADD STOP</button>
+    <button class="add-btn" id="add-btn">＋ 新增地點</button>
   `;
   renderWeather(day.date);
   const cardsEl = document.getElementById("cards");
@@ -1488,8 +1488,8 @@ function renderCard(item) {
     ${item.transport ? `<div class="card-meta">${highlightSearch(item.transport)}</div>` : ""}
     ${noteText ? `<div class="card-note">${escapeHtml(noteText)}</div>` : ""}
     <div class="card-actions">
-      ${naverUrl ? `<a class="link-naver" href="${naverUrl}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-map-pin"/></svg>NAVER MAP</a>` : ""}
-      <button class="link-note"><svg class="icon"><use href="#i-pencil"/></svg>${item.note ? "EDIT NOTE" : "ADD NOTE"}</button>
+      ${naverUrl ? `<a class="link-naver" href="${naverUrl}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-map-pin"/></svg>Naver 地圖</a>` : ""}
+      <button class="link-note"><svg class="icon"><use href="#i-pencil"/></svg>${item.note ? "編輯備註" : "加備註"}</button>
     </div>
   `;
   div.querySelector(".card-menu-btn").onclick = (e) => {
@@ -1522,10 +1522,10 @@ function openItemMenu(item) {
   content.innerHTML = `
     <h2>${escapeHtml(item.name)}<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
     <ul class="menu-list">
-      <li data-act="edit"><svg class="icon icon-sm"><use href="#i-pen-line"/></svg>EDIT</li>
-      <li data-act="note"><svg class="icon icon-sm"><use href="#i-pencil"/></svg>${item.note ? "NOTE" : "NOTE"}</li>
-      <li data-act="toggle-hide"><svg class="icon icon-sm"><use href="#i-${item.hidden ? "eye" : "eye-off"}"/></svg>${item.hidden ? "SHOW" : "HIDE"}</li>
-      ${item._custom ? `<li class="danger" data-act="delete"><svg class="icon icon-sm"><use href="#i-trash-2"/></svg>DELETE</li>` : ""}
+      <li data-act="edit"><svg class="icon icon-sm"><use href="#i-pen-line"/></svg>編輯時間/名稱</li>
+      <li data-act="note"><svg class="icon icon-sm"><use href="#i-pencil"/></svg>${item.note ? "編輯備註" : "加備註"}</li>
+      <li data-act="toggle-hide"><svg class="icon icon-sm"><use href="#i-${item.hidden ? "eye" : "eye-off"}"/></svg>${item.hidden ? "顯示" : "隱藏（不去）"}</li>
+      ${item._custom ? `<li class="danger" data-act="delete"><svg class="icon icon-sm"><use href="#i-trash-2"/></svg>刪除此項目</li>` : ""}
     </ul>
   `;
   content.querySelector(".close").onclick = closeModal;
@@ -1557,15 +1557,15 @@ function openNoteEdit(item) {
   const modal = document.getElementById("modal");
   const content = document.getElementById("modal-content");
   content.innerHTML = `
-    <h2>NOTE<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+    <h2>備註<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
     <div class="field">
       <label>內容</label>
       <textarea id="note-input" placeholder="例：跟朋友會合在 X 號出口 / 已買到限定款">${escapeHtml(item.note || "")}</textarea>
       ${item.note_default ? `<div class="hint">預設提示：${escapeHtml(item.note_default)}</div>` : ""}
     </div>
     <div class="btn-row">
-      <button id="cancel">CANCEL</button>
-      <button class="primary" id="save">SAVE</button>
+      <button id="cancel">取消</button>
+      <button class="primary" id="save">儲存</button>
     </div>
   `;
   content.querySelector(".close").onclick = closeModal;
@@ -1586,15 +1586,15 @@ function openItemEdit(item) {
   const content = document.getElementById("modal-content");
   const data = item || { id: "u" + Date.now(), time: "", name: "", transport: "", search: "", note: "", _custom: true };
   content.innerHTML = `
-    <h2>${isNew ? "NEW ITEM" : "EDIT ITEM"}<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+    <h2>${isNew ? "新增項目" : "編輯項目"}<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
     <div class="field"><label>時間</label><input id="f-time" value="${escapeHtml(data.time)}" placeholder="14:00"></div>
     <div class="field"><label>名稱</label><input id="f-name" value="${escapeHtml(data.name)}" placeholder="店名 / 行程"></div>
     <div class="field"><label>交通/地點</label><input id="f-tx" value="${escapeHtml(data.transport || "")}" placeholder="2 號出口走 5min"></div>
     <div class="field"><label>Naver 地點</label><input id="f-search" value="${escapeHtml(data.search || "")}" placeholder="진옥화할매원조닭한마리 或貼 naver.me 連結"><div class="hint">貼 Naver 分享連結（naver.me/...）最準；或填精確韓文店名/地址</div></div>
     <div class="btn-row">
-      ${isNew ? "" : '<button class="danger" id="del">DELETE</button>'}
-      <button id="cancel">CANCEL</button>
-      <button class="primary" id="save">SAVE</button>
+      ${isNew ? "" : '<button class="danger" id="del">刪除</button>'}
+      <button id="cancel">取消</button>
+      <button class="primary" id="save">儲存</button>
     </div>
   `;
   content.querySelector(".close").onclick = closeModal;
@@ -1640,51 +1640,50 @@ function openSettings() {
   const token = getToken();
   const gistId = getGistId();
   content.innerHTML = `
-    <h2>SETTINGS<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+    <h2>設定<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
 
     <div class="settings-section">
-      <h3>CLOUD SYNC</h3>
+      <h3>雲端同步</h3>
       <div class="field">
         <label>GitHub Personal Access Token（gist scope）</label>
         <input type="password" id="set-token" value="${escapeHtml(token)}" placeholder="ghp_…">
-        <div class="hint">建立 token：github.com/settings/tokens → Generate new token (classic) → 勾 gist</div>
       </div>
       <div class="field">
         <label>Gist ID</label>
         <input id="set-gistid" value="${escapeHtml(gistId)}" placeholder="尚未建立">
       </div>
       <div class="btn-row">
-        <button id="btn-create-gist">CREATE GIST</button>
-        <button id="btn-pull">PULL</button>
-        <button class="primary" id="btn-save-cred">SAVE</button>
+        <button id="btn-create-gist">建立 Gist</button>
+        <button id="btn-pull">拉取雲端</button>
+        <button class="primary" id="btn-save-cred">儲存</button>
       </div>
-      <div class="kv" style="margin-top:10px"><span class="k">STATE</span><span class="v" id="sync-info">${pendingSync ? "PENDING" : (token && gistId ? "READY" : "NOT SET")}</span></div>
+      <div class="kv" style="margin-top:10px"><span class="k">狀態</span><span class="v" id="sync-info">${pendingSync ? "待同步" : (token && gistId ? "就緒" : "未設定")}</span></div>
     </div>
 
     <div class="settings-section">
-      <h3>DISPLAY</h3>
+      <h3>顯示</h3>
       <div class="field">
         <label><input type="checkbox" id="set-hidden" ${showHidden ? "checked" : ""}> 顯示已隱藏的項目</label>
       </div>
     </div>
 
     <div class="settings-section">
-      <h3>DATA</h3>
+      <h3>資料</h3>
       <div class="btn-row">
-        <button id="btn-export">EXPORT</button>
-        <button id="btn-import">IMPORT</button>
+        <button id="btn-export">匯出</button>
+        <button id="btn-import">匯入</button>
       </div>
       <div class="btn-row">
-        <button class="danger" id="btn-reset">RESET TO DEFAULT</button>
+        <button class="danger" id="btn-reset">重置為預設</button>
       </div>
       <div class="hint" style="margin-top:8px">「重置」會清空所有勾選/備註/排序，僅保留出廠資料。</div>
     </div>
 
     <div class="settings-section">
-      <h3>ABOUT</h3>
-      <div class="kv"><span class="k">VERSION</span><span class="v">v${state.schema}</span></div>
-      <div class="kv"><span class="k">ITEMS</span><span class="v">${Object.values(state.items).flat().length}</span></div>
-      <div class="kv"><span class="k">DONE</span><span class="v">${Object.values(state.items).flat().filter(i => i.done).length}</span></div>
+      <h3>關於</h3>
+      <div class="kv"><span class="k">版本</span><span class="v">v${state.schema}</span></div>
+      <div class="kv"><span class="k">項目數</span><span class="v">${Object.values(state.items).flat().length}</span></div>
+      <div class="kv"><span class="k">已完成</span><span class="v">${Object.values(state.items).flat().filter(i => i.done).length}</span></div>
     </div>
   `;
   content.querySelector(".close").onclick = closeModal;
@@ -1822,7 +1821,7 @@ function renderWeather(dateStr) {
   const iconId = weatherCodeToIconId(code);
   const text = weatherCodeToText(code);
   const popHtml = pop != null ? `<span class="w-pop">降雨 ${pop}%</span>` : "";
-  const warnTag = pop != null && pop >= 60 ? `<span class="w-warn-tag">BRING UMBRELLA</span>` : "";
+  const warnTag = pop != null && pop >= 60 ? `<span class="w-warn-tag">記得帶傘</span>` : "";
 
   // last updated
   let updated = "";
@@ -1830,7 +1829,7 @@ function renderWeather(dateStr) {
     const cached = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null");
     if (cached) {
       const mins = Math.round((Date.now() - cached.at) / 60000);
-      updated = mins < 1 ? "Updated just now" : `Updated ${mins} min ago`;
+      updated = mins < 1 ? "剛剛更新" : `${mins} 分鐘前更新`;
     }
   } catch {}
 
@@ -1839,8 +1838,8 @@ function renderWeather(dateStr) {
   const targetDate = new Date(target);
   const daysAhead = Math.round((targetDate - today) / 86400000);
   const longRange = daysAhead > 5
-    ? `<div class="w-source warn">Long-range — verify closer to date</div>`
-    : `<div class="w-source">Data: Open-Meteo (ECMWF) — accuracy decreases over time</div>`;
+    ? `<div class="w-source warn">遠期預報僅供參考，越接近日期越準</div>`
+    : `<div class="w-source">資料：Open-Meteo (ECMWF) — 越接近日期越準</div>`;
 
   slot.innerHTML = `<div class="weather-card" id="weather-card">
     <div class="w-main">
@@ -1874,8 +1873,8 @@ function renderPacking() {
   const total = all.length;
   let html = `
     <div class="packing-header">
-      <h1>PACKING</h1>
-      <span class="progress">${done} / ${total} COMPLETE</span>
+      <h1>行李清單</h1>
+      <span class="progress">${done} / ${total} 完成</span>
     </div>
   `;
   state.packing.forEach(cat => {
@@ -1885,7 +1884,7 @@ function renderPacking() {
     const collapsed = packingCollapsed[cat.id] === true;
     html += `<div class="pack-cat${collapsed ? " collapsed" : ""}" data-cat="${cat.id}">
       <div class="pack-cat-head">
-        <span>${escapeHtml(cat.title.toUpperCase())}</span>
+        <span>${escapeHtml(cat.title)}</span>
         <span>
           <span class="pct-progress${isComplete ? " done" : ""}">${catDone}/${catTotal}</span>
           <span class="chev"><svg class="icon icon-sm"><use href="#i-chevron-down"/></svg></span>
@@ -1935,6 +1934,8 @@ function renderPacking() {
       e.stopPropagation();
       const itemId = btn.dataset.del;
       const cat = state.packing.find(c => c.items.find(i => i.id === itemId));
+      const target = cat.items.find(i => i.id === itemId);
+      if (!confirm(`確定刪除「${target ? target.name : "這個項目"}」？`)) return;
       cat.items = cat.items.filter(i => i.id !== itemId);
       saveLocal();
       renderPacking();
@@ -1966,11 +1967,11 @@ function renderPacking() {
 function renderMap() {
   const main = document.getElementById("view-map");
   if (!main.querySelector("#leaflet-map")) {
-    let chips = `<button class="map-day-chip all${mapDayFilter === "all" ? " active" : ""}" data-day="all">ALL</button>`;
+    let chips = `<button class="map-day-chip all${mapDayFilter === "all" ? " active" : ""}" data-day="all">全部</button>`;
     chips += state.days.map((d, i) =>
       `<button class="map-day-chip${mapDayFilter === d.id ? " active" : ""}" data-day="${d.id}">${d.date}</button>`
     ).join("");
-    const legend = `<span>Tap a date to focus · ${state.days.length} days · ${Object.keys(ITEM_REGIONS).length} pins</span>`;
+    const legend = `<span>點上方日期可聚焦 · 共 ${state.days.length} 天 · ${Object.keys(ITEM_REGIONS).length} 個地點</span>`;
     main.innerHTML = `
       <div class="map-controls">${chips}</div>
       <div id="leaflet-map"></div>
@@ -2047,7 +2048,7 @@ function renderMap() {
       marker.bindPopup(`
         <b><span class="pop-time">${escapeHtml(item.time || "")}</span>${escapeHtml(item.name)}</b>
         <div class="pop-day">${day.date} ${day.weekday} · ${r.name}</div>
-        ${naverUrl ? `<a href="${naverUrl}" target="_blank">NAVER MAP</a>` : ""}
+        ${naverUrl ? `<a href="${naverUrl}" target="_blank">Naver 地圖</a>` : ""}
       `);
       mapMarkers.push(marker);
     });
