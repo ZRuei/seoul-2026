@@ -1285,9 +1285,11 @@ async function syncToGist() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     pendingSync = false;
     setSyncStatus("SYNCED", "ok");
+    toast("已同步到雲端");
   } catch (e) {
     console.error(e);
     setSyncStatus("SYNC FAILED", "err");
+    toast("同步失敗，請檢查網路");
   }
 }
 
