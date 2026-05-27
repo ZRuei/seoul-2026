@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=yes">
+<meta name="theme-color" content="#FAFAFA">
+<title>SHINee 首爾行 2026</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FAFAFA'/%3E%3Ctext x='50' y='62' text-anchor='middle' font-size='40' fill='%231A1A1A' font-family='Inter,sans-serif' font-weight='900'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Noto+Sans+TC:wght@300;400;700;900&display=swap">
+<style>
+:root {
+  --bg:           #FAFAFA;
+  --surface:      #FFFFFF;
+  --ink:          #1A1A1A;
+  --ink-mute:     #71717A;
+  --line:         #E4E4E7;
+  --accent:       #79E5CB;
+  --accent-mute:  #F0FBF7;
+  --warn:         #F59E0B;
+  --done:         #A1A1AA;
+  --danger:       #DC2626;
+  --tap: 44px;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+  --space-16: 64px;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Inter", "Noto Sans TC", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing: antialiased;
+}
+
+header.app-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: env(safe-area-inset-top) 16px 0 16px;
+}
+.title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0 10px;
+}
+.title {
+  font-family: "Inter", sans-serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink);
+}
+.title .brand-shinee { text-transform: none; letter-spacing: 0.02em; }
+.title .sync-pill {
+  font-size: 10px; font-weight: 700;
+  margin-left: 10px; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--ink-mute);
+  vertical-align: 1px;
+  background: transparent; padding: 0; border-radius: 0;
+  transition: color 200ms ease;
+}
+.sync-pill.ok { color: var(--ink); }
+.sync-pill.warn { color: var(--warn); }
+.sync-pill.err { color: var(--danger); }
+.icon-btn {
+  width: 36px; height: 36px;
+  border: none; background: transparent; cursor: pointer;
+  color: var(--ink-mute);
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 300ms ease;
+}
+.icon-btn:hover { color: var(--accent); }
+.icon-btn:active { color: var(--accent); }
+
+nav.day-tabs {
+  display: flex; gap: 2px; overflow-x: auto;
+  padding: 0 0 0 0; margin-bottom: 0;
+  border-top: 1px solid var(--line);
+  scrollbar-width: none;
+  position: relative;
+}
+nav.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex: 0 0 auto;
+  border: none; background: transparent;
+  padding: 12px 14px 14px;
+  font-family: "Inter", sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-mute); cursor: pointer;
+  white-space: nowrap;
+  transition: color 300ms ease;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+.day-tab:hover { color: var(--ink); }
+.day-tab .dnum {
+  display: block; font-size: 15px; font-weight: 900;
+  letter-spacing: -0.01em; color: inherit;
+  margin-bottom: 2px;
+}
+.day-tab.active { color: var(--ink); }
+.day-tab.active::after {
+  content: ""; position: absolute;
+  left: 12px; right: 12px; bottom: 0; height: 2px;
+  background: var(--accent);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
+
+.day-header {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin: 24px 0 12px;
+}
+.day-header h1 {
+  font-family: "Inter", sans-serif;
+  font-size: 32px; font-weight: 900;
+  letter-spacing: -0.02em; margin: 0;
+}
+.day-header .subtitle {
+  font-size: 13px; color: var(--ink-mute);
+  font-weight: 300;
+}
+.day-summary {
+  font-size: 13px; color: var(--ink);
+  background: transparent;
+  border: none; border-left: 2px solid var(--line);
+  padding: 0 0 0 14px; margin-bottom: 24px;
+  line-height: 1.6; font-weight: 300;
+}
+
+.cards { display: block; }
+
+.card {
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line);
+  padding: 18px 0;
+  position: relative;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cards .card:last-child { border-bottom: 1px solid var(--line); }
+.card.dragging { opacity: 0.4; }
+.card.ghost {
+  background: var(--accent-mute);
+  border-top: 1px dashed var(--accent);
+}
+.card.hidden-item { display: none; }
+.show-hidden .card.hidden-item {
+  display: block; opacity: 0.4; border-style: dashed;
+}
+
+/* tier system */
+.card[data-tier="anchor"] {
+  border-left: 4px solid var(--accent);
+  padding-left: 14px;
+  padding-right: 14px;
+}
+.card[data-tier="anchor"] .card-name { font-weight: 900; }
+.card[data-tier="anchor"] .card-tag {
+  border-color: var(--accent); color: var(--ink);
+}
+.card[data-tier="optional"] {
+  opacity: 0.55;
+  transition: opacity 300ms ease;
+}
+.card[data-tier="optional"]:hover { opacity: 1; }
+.card[data-tier="optional"] .card-name {
+  font-weight: 300; color: var(--ink-mute);
+}
+
+/* done state */
+.card[data-done="true"] .card-name {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--ink-mute);
+  color: var(--ink-mute);
+}
+.card[data-done="true"] .card-time { color: var(--ink-mute); }
+.card[data-done="true"] .card-tag { display: none; }
+.card[data-done="true"] .card-actions { opacity: 0.5; }
+
+/* row layout */
+.card-row {
+  display: flex; align-items: baseline; gap: 12px;
+}
+.card-time {
+  font-family: "Inter", monospace;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px; color: var(--ink);
+  min-width: 50px; flex-shrink: 0;
+}
+.card-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  padding: 2px 7px; border: 1px solid var(--line);
+  text-transform: uppercase; color: var(--ink-mute);
+  white-space: nowrap; flex-shrink: 0;
+  transition: border-color 300ms ease, color 300ms ease;
+}
+.card-tag:hover { border-color: var(--accent); color: var(--ink); }
+.card-name {
+  font-family: "Inter", "Noto Sans TC", sans-serif;
+  font-size: 15px; font-weight: 700; margin: 0;
+  letter-spacing: -0.005em; flex: 1; color: var(--ink);
+  line-height: 1.4;
+}
+.card-menu-btn {
+  margin-left: auto; padding: 4px; background: transparent;
+  border: none; color: var(--ink-mute); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 300ms ease;
+}
+.card-menu-btn:hover { color: var(--accent); }
+
+/* meta + actions */
+.card-meta {
+  font-size: 13px; color: var(--ink-mute);
+  font-weight: 300; margin-top: 6px;
+  padding-left: 62px; line-height: 1.5;
+}
+.card-meta .tx-icon { display: none; }
+.card-actions {
+  margin-top: 12px; padding-left: 62px;
+  display: flex; gap: 18px; flex-wrap: wrap;
+}
+.link-naver, .link-note {
+  font-family: "Inter", sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink);
+  border: none; background: transparent; padding: 0;
+  cursor: pointer; text-decoration: none;
+  transition: color 300ms ease;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.link-naver:hover, .link-note:hover { color: var(--accent); }
+.link-naver .icon, .link-note .icon { width: 14px; height: 14px; }
+
+/* drag handle: hover-only */
+.drag-handle {
+  position: absolute; left: -22px; top: 18px;
+  color: var(--ink-mute);
+  cursor: grab; touch-action: none;
+  opacity: 0; transition: opacity 200ms ease;
+  padding: 4px;
+}
+.card:hover .drag-handle { opacity: 0.6; }
+.card .drag-handle:active { cursor: grabbing; opacity: 1; }
+
+/* checkbox */
+.card-checkbox {
+  width: 20px; height: 20px;
+  border: 1.5px solid var(--ink-mute);
+  border-radius: 0;
+  background: transparent; cursor: pointer; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all 180ms ease;
+  color: transparent;
+}
+.card-checkbox.checked {
+  background: var(--ink); border-color: var(--ink);
+  color: white; transform: scale(1);
+}
+.card-checkbox.bounce { animation: cb-bounce 180ms ease; }
+@keyframes cb-bounce {
+  0% { transform: scale(0.6); }
+  100% { transform: scale(1); }
+}
+
+/* note */
+.card-note {
+  margin-top: 10px; padding: 10px 12px;
+  background: transparent;
+  border-left: 2px solid var(--warn);
+  font-size: 13px; color: var(--ink);
+  font-weight: 300; line-height: 1.55;
+  white-space: pre-wrap; word-break: break-word;
+  margin-left: 62px;
+}
+.card-note:empty { display: none; }
+
+/* add btn */
+.add-btn {
+  margin: 24px 0 0; display: block; width: 100%;
+  padding: 14px; background: transparent;
+  border: none; border-top: 1px solid var(--line);
+  color: var(--ink-mute);
+  font-family: "Inter", sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; transition: color 300ms ease;
+}
+.add-btn:hover { color: var(--accent); }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: none; align-items: flex-end; justify-content: center;
+  z-index: 100; padding: 0;
+  opacity: 0; transition: opacity 250ms ease;
+}
+.modal-backdrop.show {
+  display: flex; opacity: 1;
+}
+.modal {
+  background: var(--surface); width: 100%; max-width: 600px;
+  border-radius: 16px 16px 0 0;
+  padding: 20px;
+  max-height: 85vh; overflow-y: auto;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.modal-backdrop.show .modal { transform: translateY(0); }
+
+.modal h2 {
+  font-family: "Inter", sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin: 4px 0 18px;
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--ink);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+.modal h2 .close {
+  background: transparent; border: none;
+  color: var(--ink-mute); cursor: pointer;
+  padding: 4px; transition: color 300ms ease;
+}
+.modal h2 .close:hover { color: var(--accent); }
+
+.field { margin-bottom: 16px; }
+.field label {
+  display: block; font-family: "Inter", sans-serif;
+  font-size: 10px; color: var(--ink-mute);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin-bottom: 6px; font-weight: 700;
+}
+.field input, .field textarea, .field select {
+  width: 100%; padding: 10px 0;
+  border: none; border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  font-size: 14px; font-family: inherit;
+  background: transparent; color: var(--ink);
+  transition: border-color 300ms ease;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none; border-bottom-color: var(--accent);
+}
+.field textarea { min-height: 80px; resize: vertical; }
+.field .hint {
+  font-size: 11px; color: var(--ink-mute);
+  margin-top: 6px; font-weight: 300;
+}
+.btn-row { display: flex; gap: 8px; margin-top: 20px; }
+.btn-row button {
+  flex: 1; padding: 12px;
+  border-radius: 0; border: 1px solid var(--line);
+  font-family: "Inter", sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; background: transparent;
+  color: var(--ink);
+  transition: all 300ms ease;
+}
+.btn-row button:hover {
+  border-color: var(--accent); color: var(--accent);
+}
+.btn-row button.primary {
+  background: var(--ink); color: white; border-color: var(--ink);
+}
+.btn-row button.primary:hover {
+  background: var(--accent); border-color: var(--accent); color: var(--ink);
+}
+.btn-row button.danger {
+  color: var(--danger); border-color: var(--line);
+}
+.btn-row button.danger:hover {
+  border-color: var(--danger); color: var(--danger);
+}
+
+.menu-list { list-style: none; padding: 0; margin: 0; }
+.menu-list li {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; gap: 14px;
+  color: var(--ink);
+  transition: color 300ms ease;
+}
+.menu-list li:hover { color: var(--accent); }
+.menu-list li:last-child { border-bottom: none; }
+.menu-list li.danger { color: var(--danger); }
+.menu-list li.danger:hover { color: var(--danger); opacity: 0.7; }
+.menu-list li .icon {
+  width: 20px; height: 20px; text-align: center;
+  color: var(--ink-mute);
+}
+
+.settings-section {
+  margin-bottom: 24px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.settings-section:last-child { border-bottom: none; }
+.settings-section h3 {
+  font-family: "Inter", sans-serif;
+  font-size: 10px; color: var(--ink-mute);
+  margin: 0 0 12px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 700;
+}
+.kv {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; font-size: 13px;
+  border-bottom: 1px solid var(--line);
+}
+.kv:last-child { border-bottom: none; }
+.kv .k { color: var(--ink-mute); font-weight: 300; }
+.kv .v { font-weight: 700; word-break: break-all; color: var(--ink); }
+
+/* search */
+.search-box {
+  padding: 0 0 12px;
+  display: none;
+}
+.search-box.show { display: block; }
+.search-box input {
+  width: 100%; padding: 8px 0;
+  border: none; border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  font-size: 14px; font-family: inherit; background: transparent;
+  color: var(--ink);
+  transition: border-color 300ms ease;
+}
+.search-box input:focus {
+  outline: none; border-bottom-color: var(--accent);
+}
+.search-hit-mark {
+  background: var(--accent-mute); padding: 0 2px;
+  border-radius: 0; color: var(--ink);
+}
+
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(80px + env(safe-area-inset-bottom));
+  background: var(--ink); color: white;
+  padding: 10px 20px; border-radius: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  opacity: 0; transition: opacity 200ms ease;
+  z-index: 200; pointer-events: none; max-width: 90%;
+}
+.toast.show { opacity: 1; }
+
+@media (max-width: 380px) {
+  .day-tab { padding: 6px 10px; font-size: 12px; }
+  .day-tab .dnum { font-size: 15px; }
+  .card { padding: 14px 0; }
+}
+
+/* ----- Bottom Nav ----- */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  display: flex; z-index: 60;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav button {
+  flex: 1; background: transparent; border: none;
+  padding: 12px 4px 10px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  color: var(--ink-mute); cursor: pointer;
+  font-family: "Inter", sans-serif;
+  min-height: 56px; position: relative;
+  transition: color 300ms ease;
+}
+.bottom-nav button:hover { color: var(--ink); }
+.bottom-nav button.active { color: var(--ink); }
+.bottom-nav button.active::before {
+  content: ""; position: absolute;
+  top: 0; left: 28%; right: 28%; height: 2px;
+  background: var(--accent);
+}
+.bottom-nav button .nlabel {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* hide day tabs on non-itinerary views */
+body[data-view="packing"] nav.day-tabs,
+body[data-view="map"] nav.day-tabs { display: none; }
+
+.view { display: none; }
+.view.active { display: block; }
+
+/* ----- Weather Card ----- */
+.weather-card {
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 18px 0;
+  margin-bottom: 24px;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+.weather-card:hover { background: var(--accent-mute); }
+.weather-card.loading { opacity: 0.55; cursor: progress; }
+.weather-card.error .w-temp { color: var(--warn); }
+.weather-card .w-main {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+}
+.weather-card .w-icon { color: var(--ink); flex-shrink: 0; align-self: center; }
+.weather-card .w-temp {
+  font-family: "Inter", sans-serif;
+  font-size: 24px; font-weight: 900; color: var(--ink);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.weather-card .w-text { font-size: 13px; color: var(--ink); font-weight: 400; }
+.weather-card .w-pop { font-size: 12px; color: var(--ink-mute); font-weight: 300; }
+.weather-card .w-warn-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  padding: 2px 8px; border: 1px solid var(--warn);
+  color: var(--warn); text-transform: uppercase;
+}
+.weather-card .w-meta {
+  margin-top: 10px; display: flex; gap: 16px; align-items: center;
+  font-size: 10px; color: var(--ink-mute);
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.weather-card .w-meta a {
+  color: var(--ink); text-decoration: none; font-weight: 700;
+  transition: color 300ms ease;
+}
+.weather-card .w-meta a:hover { color: var(--accent); }
+.weather-card .w-updated { margin-left: auto; font-weight: 300; text-transform: none; letter-spacing: 0; }
+.weather-card .w-source {
+  margin-top: 6px; font-size: 10px;
+  color: var(--ink-mute); font-weight: 300;
+}
+.weather-card .w-source.warn { color: var(--warn); }
+
+/* ----- Packing View ----- */
+.packing-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin: 24px 0 24px;
+}
+.packing-header h1 {
+  font-family: "Inter", sans-serif;
+  font-size: 28px; font-weight: 900;
+  letter-spacing: -0.02em; margin: 0;
+}
+.packing-header .progress {
+  font-size: 12px; color: var(--ink-mute);
+  font-family: "Inter", sans-serif;
+  font-weight: 300; letter-spacing: 0.05em;
+  background: transparent; padding: 0; border: none;
+}
+.pack-cat {
+  background: transparent;
+  border: none; border-radius: 0;
+  margin-bottom: 32px;
+  overflow: visible;
+}
+.pack-cat-head {
+  padding: 0 0 12px 0;
+  font-family: "Inter", sans-serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink);
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; user-select: none;
+  border-bottom: 1px solid var(--line);
+}
+.pack-cat-head .pct-progress {
+  font-size: 11px; color: var(--ink-mute);
+  font-weight: 300; padding: 0;
+  background: transparent; border-radius: 0;
+  letter-spacing: 0;
+}
+.pack-cat-head .pct-progress.done { color: var(--accent); }
+.pack-cat-head .chev {
+  color: var(--ink-mute); margin-left: 12px;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pack-cat.collapsed .chev { transform: rotate(-90deg); }
+.pack-cat.collapsed .pack-items,
+.pack-cat.collapsed .pack-add { display: none; }
+.pack-items { padding: 0; list-style: none; margin: 0; }
+.pack-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 14px;
+  transition: opacity 300ms ease;
+}
+.pack-item.done .pack-name {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  color: var(--ink-mute);
+}
+.pack-cb {
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--ink-mute);
+  border-radius: 0;
+  background: transparent; cursor: pointer; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: transparent;
+  transition: all 180ms ease;
+}
+.pack-cb.checked {
+  background: var(--ink); border-color: var(--ink); color: white;
+}
+.pack-name {
+  flex: 1; font-size: 14px; color: var(--ink);
+  font-weight: 400;
+}
+.pack-note {
+  font-size: 12px; color: var(--ink-mute);
+  font-weight: 300; margin-left: 4px;
+}
+.pack-delete {
+  background: transparent; border: none;
+  color: var(--ink-mute); cursor: pointer;
+  padding: 4px; transition: color 300ms ease;
+}
+.pack-delete:hover { color: var(--danger); }
+.pack-add {
+  padding: 14px 0;
+  display: flex; gap: 8px;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+}
+.pack-add input {
+  flex: 1; padding: 6px 0;
+  border: none; border-bottom: 1px solid var(--line);
+  border-radius: 0; background: transparent;
+  font-size: 14px; font-family: inherit; color: var(--ink);
+  transition: border-color 300ms ease;
+}
+.pack-add input:focus {
+  outline: none; border-bottom-color: var(--accent);
+}
+.pack-add input::placeholder {
+  color: var(--ink-mute); font-weight: 300;
+}
+.pack-add button {
+  padding: 0 12px; background: transparent;
+  color: var(--ink); border: 1px solid var(--line);
+  border-radius: 0; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  cursor: pointer; font-family: "Inter", sans-serif;
+  transition: all 300ms ease;
+}
+.pack-add button:hover {
+  border-color: var(--accent); color: var(--accent);
+}
+
+/* ----- Map View ----- */
+.map-controls {
+  background: transparent;
+  border: none; border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+  margin-bottom: 12px;
+  display: flex; gap: 4px; overflow-x: auto;
+  scrollbar-width: none;
+}
+.map-controls::-webkit-scrollbar { display: none; }
+.map-day-chip {
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: none; border-radius: 0;
+  background: transparent;
+  color: var(--ink-mute);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+  cursor: pointer; white-space: nowrap;
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  position: relative;
+  transition: color 300ms ease;
+}
+.map-day-chip:hover { color: var(--ink); }
+.map-day-chip.active { color: var(--ink); }
+.map-day-chip.active::after {
+  content: ""; position: absolute;
+  left: 12px; right: 12px; bottom: 0; height: 2px;
+  background: var(--accent);
+}
+.map-day-chip.all.active::after { background: var(--accent); }
+
+#leaflet-map {
+  height: calc(100vh - 240px); min-height: 380px;
+  border: 1px solid var(--line);
+  border-radius: 0; overflow: hidden;
+}
+.leaflet-popup-content { font-family: inherit; font-size: 13px; }
+.leaflet-popup-content b { display: block; margin-bottom: 4px; font-weight: 700; }
+.leaflet-popup-content .pop-time {
+  color: var(--ink); font-weight: 700;
+  margin-right: 6px; font-family: "Inter", monospace;
+}
+.leaflet-popup-content .pop-day {
+  font-size: 11px; color: var(--ink-mute);
+  font-weight: 300;
+}
+.leaflet-popup-content a {
+  color: var(--ink); font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  font-size: 11px; text-decoration: none;
+  transition: color 300ms ease;
+}
+.leaflet-popup-content a:hover { color: var(--accent); }
+.leaflet-popup-content-wrapper { border-radius: 0; }
+.map-legend {
+  display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px;
+  padding: 12px 0; background: transparent;
+  border-top: 1px solid var(--line);
+  font-size: 10px; color: var(--ink-mute);
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.map-legend .dot {
+  display: inline-block; width: 8px; height: 8px;
+  border-radius: 50%; margin-right: 6px; vertical-align: middle;
+}
+/* ===== Icon System ===== */
+.icon {
+  display: inline-block;
+  vertical-align: -3px;
+  flex-shrink: 0;
+  color: currentColor;
+}
+.icon-sm { width: 16px; height: 16px; }
+.icon-md { width: 20px; height: 20px; }
+.icon-lg { width: 24px; height: 24px; }
+.icon-xl { width: 32px; height: 32px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .cards .card {
+    animation: card-in 250ms cubic-bezier(0.4, 0, 0.2, 1) backwards;
+  }
+  .cards .card:nth-child(1) { animation-delay: 0ms; }
+  .cards .card:nth-child(2) { animation-delay: 30ms; }
+  .cards .card:nth-child(3) { animation-delay: 60ms; }
+  .cards .card:nth-child(4) { animation-delay: 90ms; }
+  .cards .card:nth-child(5) { animation-delay: 120ms; }
+  .cards .card:nth-child(6) { animation-delay: 150ms; }
+  .cards .card:nth-child(7) { animation-delay: 180ms; }
+  .cards .card:nth-child(8) { animation-delay: 210ms; }
+  .cards .card:nth-child(n+9) { animation-delay: 240ms; }
+  @keyframes card-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .view.active {
+    animation: view-in 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  @keyframes view-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-backpack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 10h8M8 18v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-grip-vertical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-more-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+    <symbol id="i-pen-line" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61M2 2l20 20"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-trash-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></symbol>
+    <symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 7-8 13-8 13s-8-6-8-13a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-refresh-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16M16 16h5v5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol>
+    <symbol id="i-cloud-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M5.22 5.22l1.42 1.42M20 12h2M15.97 12.5A4 4 0 0 0 9.5 7.66M19.78 5.22l-1.42 1.42M22 12a4 4 0 0 0-4-4M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6z"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.78A7 7 0 1 0 4 14.93"/></symbol>
+    <symbol id="i-cloud-fog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17H7M17 21H9M21 13.65A6 6 0 0 0 9 11a8 8 0 0 0 0 .94"/></symbol>
+    <symbol id="i-cloud-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 14v6M8 14v6M12 16v6M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></symbol>
+    <symbol id="i-cloud-drizzle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25M8 19v1M8 14v1M16 19v1M16 14v1M12 21v1M12 16v1"/></symbol>
+    <symbol id="i-cloud-snow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25M8 15h.01M8 19h.01M12 17h.01M12 21h.01M16 15h.01M16 19h.01"/></symbol>
+    <symbol id="i-cloud-lightning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.326A7 7 0 1 1 18 10c.16 0 .322.012.481.034A4.5 4.5 0 0 1 22 16.5M13 12l-3 5h4l-3 5"/></symbol>
+  </defs>
+</svg>
+
+<header class="app-header">
+  <div class="title-row">
+    <div class="title">
+      SEOUL 2026 — <span class="brand-shinee">SHINee</span>
+      <span class="sync-pill" id="sync-status">OFFLINE</span>
+    </div>
+    <div>
+      <button class="icon-btn" id="search-toggle" aria-label="搜尋"><svg class="icon icon-md"><use href="#i-search"/></svg></button>
+      <button class="icon-btn" id="settings-btn" aria-label="設定"><svg class="icon icon-md"><use href="#i-settings"/></svg></button>
+    </div>
+  </div>
+  <div class="search-box" id="search-box">
+    <input type="search" id="search-input" placeholder="搜尋店名/地點/備註…">
+  </div>
+  <nav class="day-tabs" id="day-tabs"></nav>
+</header>
+
+<main>
+  <div class="view active" id="view-itinerary"></div>
+  <div class="view" id="view-packing"></div>
+  <div class="view" id="view-map"></div>
+</main>
+
+<nav class="bottom-nav">
+  <button data-view="itinerary" class="active"><svg class="icon icon-md"><use href="#i-calendar"/></svg><span class="nlabel">Itinerary</span></button>
+  <button data-view="packing"><svg class="icon icon-md"><use href="#i-backpack"/></svg><span class="nlabel">Packing</span></button>
+  <button data-view="map"><svg class="icon icon-md"><use href="#i-map"/></svg><span class="nlabel">Map</span></button>
+</nav>
+
+<div class="modal-backdrop" id="modal"><div class="modal" id="modal-content"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+/* ==================== DEFAULT DATA ==================== */
+const SCHEMA_VERSION = 1;
+const DEFAULT_DATA = {
+  schema: SCHEMA_VERSION,
+  trip: {
+    title: "SHINee 首爾行 2026",
+    dates: "2026/5/28 – 6/3",
+    hotel: "DM Hotel（東廟）",
+    members: ["布丁", "樂", "歪歪"]
+  },
+  days: [
+    {
+      id: "d0528", date: "5/28", weekday: "週四", short: "抵達",
+      title: "抵達日：分頭會合 / APM 夜逛",
+      summary: "歪歪先進市區換匯；布丁機場等樂 19:45；三人飯店會合後 APM 夜逛；宵夜大兒子湯飯。"
+    },
+    {
+      id: "d0529", date: "5/29", weekday: "週五", short: "演唱會",
+      title: "演唱會日：聖水 → KSPO Dome",
+      summary: "上午聖水珉豪自助餐 + 帥哥咖啡，下午回飯店換裝，19:00 KSPO 演唱會！宵夜彈性決定。"
+    },
+    {
+      id: "d0530", date: "5/30", weekday: "週六", short: "龍山+弘大",
+      title: "龍山 + 弘大延南：購物日",
+      summary: "龍山 iPark 任天堂 + 朋友帶路烤肉，下午整下午在弘大延南掃店。"
+    },
+    {
+      id: "d0531", date: "5/31", weekday: "週日", short: "望遠+明洞",
+      title: "望遠 + 明洞：藥妝採買",
+      summary: "望遠市場早午餐 → 明洞 SOLSOT/餃子 → 龍鬚糖小哥 → 首爾站樂天超市。"
+    },
+    {
+      id: "d0601", date: "6/1", weekday: "週一", short: "SVT+駱山",
+      title: "SVT 快閃 + 駱山公園夕陽",
+      summary: "聖水 SVT 快閃 → 建大甜點 → 飯店休息 → 駱山公園夕陽 → 陳玉華晚餐 → DDP 夜景。"
+    },
+    {
+      id: "d0602", date: "6/2", weekday: "週二", short: "三清+林",
+      title: "三清洞 + 首爾林 + 中浪玫瑰",
+      summary: "東廟玩具街 → 三清洞太咪麵疙瘩 → 首爾林寶可夢 → 中浪玫瑰 → 回飯店收行李。"
+    },
+    {
+      id: "d0603", date: "6/3", weekday: "週三", short: "回國",
+      title: "回國日",
+      summary: "金浦 10:50 起飛 → 12:45 高雄。德威線上報到 6/2 晚完成。"
+    }
+  ],
+  items: {
+    d0528: [
+      { id: "i528-1", time: "14:00", name: "布丁+歪歪 松山→金浦", transport: "ZE888 / 飛機 2.5h", fixed: true },
+      { id: "i528-2", time: "16:00", name: "樂 高雄→金浦", transport: "IT662 / 飛機 2.75h", fixed: true },
+      { id: "i528-3", time: "17:25", name: "布丁+歪歪抵金浦，分頭行動", transport: "入境大廳分手", fixed: true },
+      { id: "i528-4", time: "17:30", name: "歪歪：金浦→明洞換匯", search: "sky 환전소 명동", transport: "建議搭 6001 機場巴士（行李大）約 50min；或地鐵 9 號線急行→4 號線 35min", note_default: "sky 換錢所通常營業至 20:00，務必 19 點前到", highlight: "換匯" },
+      { id: "i528-5", time: "17:30", name: "布丁在金浦機場咖啡店等樂", search: "김포공항 Tom N Toms", transport: "Tom N Toms 或 GS25" },
+      { id: "i528-6", time: "18:30", name: "歪歪→飯店 Check-in 卸行李", search: "DM Hotel Dongmyo", transport: "明洞→6001 巴士東大門站下車步行 5min" },
+      { id: "i528-7", time: "19:45", name: "樂抵金浦，與布丁會合", transport: "入境大廳會合", fixed: true },
+      { id: "i528-8", time: "20:00", name: "布丁+樂出發飯店", transport: "建議 6001 機場巴士金浦→東大門 70min ₩7,500/人（無樓梯無換乘）", note_default: "公車優於地鐵：無樓梯、無換乘、行李大者強烈推薦" },
+      { id: "i528-9", time: "21:00", name: "三人飯店會合 Check-in 卸行李", search: "DM Hotel Dongmyo" },
+      { id: "i528-10", time: "21:30", name: "出發 APM Place", transport: "152/201 公車到東大門歷史文化公園站 10min；或步行 15–20min", note_default: "APM 20:00 開門至次日 05:00" },
+      { id: "i528-11", time: "21:45", name: "APM Place 看包包/批貨", search: "APM Place 동대문", transport: "三人各自逛、約 1.5h", highlight: "批貨" },
+      { id: "i528-12", time: "23:30", name: "宵夜：大兒子湯飯（양평해장국 큰아들집 동묘역점）", search: "양평해장국 큰아들집 동묘역점", transport: "飯店步行 3min", note_default: "24h 營業；종로구 창신동 393-13 2F", highlight: "解酒湯" },
+      { id: "i528-13", time: "00:30", name: "回飯店休息" }
+    ],
+    d0529: [
+      { id: "i529-1", time: "09:00", name: "起床、飯店早餐" },
+      { id: "i529-2", time: "10:30", name: "出發聖水", transport: "東廟→1 號線→新設洞→2 號線→聖水站 20min" },
+      { id: "i529-3", time: "11:00", name: "회현집 崔珉豪自助餐", search: "회현집 성수", transport: "聖水站 3 號出口步行", highlight: "已預約", fixed: true, note_default: "SHINee 珉豪家族經營，11:00 已預約" },
+      { id: "i529-4", time: "13:00", name: "meita wang 巨蛋塔", search: "메이타왕", transport: "聖水站 2 號出口步行 5min", highlight: "拍照" },
+      { id: "i529-5", time: "13:30", name: "Cueren 鞋店", search: "쿠에렌 성수", transport: "聖水 3 號出口走 10min", note_default: "MUSINSA Standard Seongsu 斜對面，10:00–22:00" },
+      { id: "i529-6", time: "14:30", name: "JUUNEEDU 睡衣（聖水分店）", search: "JUUNEEDU 성수", transport: "聖水林一帶", note_default: "12:00–20:00" },
+      { id: "i529-7", time: "15:30", name: "Tournesol 帥哥咖啡廳", search: "투르네솔 성수", transport: "Seongsui-ro 123", note_default: "11:00–23:00" },
+      { id: "i529-8", time: "16:30", name: "回飯店換衣/拿應援物", transport: "聖水→6 號線→東廟 15min", note_default: "演唱會 outfit、手燈、票券、行動電源" },
+      { id: "i529-9", time: "17:30", name: "出發 KSPO Dome", search: "KSPO 돔 올림픽공원", transport: "東廟→6 號線→蠶室→2 號線→蠶室渡口/夢村土城站 35min；或東廟計程車 ₩15,000–20,000" },
+      { id: "i529-10", time: "18:00", name: "抵達 KSPO，領應援物/作品", transport: "不排長隊，順手領" },
+      { id: "i529-11", time: "19:00", name: "SHINee 演唱會開演", fixed: true, highlight: "錨點", note_default: "預計 22:00–22:30 結束" },
+      { id: "i529-12", time: "22:30", name: "散場→回東廟方向", transport: "蠶室→2 號線→新堂→6 號線→東廟", note_default: "出場後先走 10–15 分鐘到蠶室站本站，避開最近出口人潮" },
+      { id: "i529-13", time: "23:30", name: "宵夜：當天視體力決定（見備註備用清單）", note_default: "備用：A 廣藏市場（8min）/ B 飯店便利商店 24h / C 紫菜飯捲天國 24h / D 蠶室就近吃 / E 不吃直接睡。推薦：B > A > E" }
+    ],
+    d0530: [
+      { id: "i530-1", time: "09:30", name: "起床、飯店早餐或東廟簡餐" },
+      { id: "i530-2", time: "11:00", name: "龍山 iPark 任天堂專賣（皮克敏盲盒）", search: "용산 아이파크몰 닌텐도", transport: "東廟→1 號線→龍山 25min", note_default: "iPark Mall 3F", highlight: "皮克敏" },
+      { id: "i530-3", time: "12:30", name: "午餐：龍山烤肉店（朋友帶路）", transport: "龍山站徒步圈", note_default: "地點待朋友當天告知；預留 90min。出發前請朋友先給店名/地址補進來。", highlight: "朋友帶路" },
+      { id: "i530-4", time: "14:00", name: "移動弘大", transport: "龍山→4 號線→市廳→2 號線→弘大入口 30min" },
+      { id: "i530-5", time: "14:30", name: "弘大 ALAND（masmarulez/SnowPeak/吉伊卡哇）", search: "ALAND 홍대", transport: "弘大入口站步行", note_default: "11:00–22:30" },
+      { id: "i530-6", time: "16:00", name: "Super Coffee 草莓牛奶", search: "슈퍼커피 서교", transport: "마포구 홍익로 10 서교푸르지오", note_default: "弘大必喝草莓牛奶 ₩8,000", highlight: "必喝" },
+      { id: "i530-7", time: "16:30", name: "帥哥咖啡廳「打工男」", search: "Ryongnyong 마라 도원 연남", transport: "弘大入口 3 號出口走 3min" },
+      { id: "i530-8", time: "17:30", name: "延南洞馬鈴薯法式吐司", search: "연남동 240-16", transport: "延南洞 240-16" },
+      { id: "i530-9", time: "18:00", name: "正心可麗露", search: "정심 까늘레 연남", transport: "弘大入口 3 號出口步行 10min", note_default: "22 Donggyo-ro 38-gil" },
+      { id: "i530-10", time: "19:00", name: "晚餐：光雞 Gwanggye", search: "광계 홍익대", transport: "弘益大學 3 號出口走 7min", note_default: "12:00–21:00（21:00 最後點餐，建議 18:30 前到）", highlight: "晚餐" },
+      { id: "i530-11", time: "21:00", name: "有貓畫框店（如尚開放）", transport: "弘大入口 3 號出口", note_default: "15:00–20:00，現場可能已關，順路看一眼" },
+      { id: "i530-12", time: "22:00", name: "回飯店", transport: "弘大入口→2 號線→新堂→6 號線→東廟 30min" }
+    ],
+    d0531: [
+      { id: "i531-1", time: "10:00", name: "望遠市場早午餐", search: "망원시장", transport: "東廟→6 號線→合井→2→新村→6 號線→望遠站 35min", note_default: "望遠站 2 號出口走 5min", highlight: "推薦" },
+      { id: "i531-2", time: "12:30", name: "移動明洞", transport: "望遠→6 號線→孔德→4 號線→明洞 35min" },
+      { id: "i531-3", time: "13:00", name: "午餐：SOLSOT（솥솥）釜飯", search: "솥솥 명동", transport: "明洞地鐵站附近", note_default: "Naver 4.3+ 連鎖石鍋拌飯" },
+      { id: "i531-4", time: "14:30", name: "NOVA Pharmacy 藥局採買", search: "NOVA 약국 명동", transport: "明洞 2 街 53 號 103 호", note_default: "中文友善：痘痘貼/腸胃藥/頭皮噴霧" },
+      { id: "i531-5", time: "15:30", name: "大創 Daiso（明洞店）", search: "다이소 명동", transport: "步行", note_default: "PDF 大創清單帶上" },
+      { id: "i531-6", time: "17:00", name: "明洞龍鬚糖小哥", transport: "明洞 Noon Square 前", note_default: "營業 17:00–23:00，6 月確認休假", highlight: "拍照" },
+      { id: "i531-7", time: "18:00", name: "sky 換錢所 / 大使館前那一家", search: "sky 환전소 명동", transport: "明洞大使館往前走一點" },
+      { id: "i531-8", time: "19:00", name: "晚餐：明洞餃子 명동교자", search: "명동교자 본점", transport: "明洞站 8 號出口", note_default: "米其林必比登；如中午吃膩釜飯就換這家", highlight: "必比登" },
+      { id: "i531-9", time: "20:30", name: "首爾站樂天超市", search: "롯데마트 서울역점", transport: "4 號線明洞→首爾站", note_default: "退稅最後機會；零食大採購", highlight: "採買" },
+      { id: "i531-10", time: "22:00", name: "回飯店", transport: "1 號線首爾站→東廟 20min" }
+    ],
+    d0601: [
+      { id: "i601-1", time: "09:30", name: "起床（演唱會隔天恢復體力）" },
+      { id: "i601-2", time: "10:30", name: "早餐：飯店附近東廟巷弄" },
+      { id: "i601-3", time: "11:30", name: "聖水站隨意逛街 / 帥哥咖啡廳補咖啡", transport: "東廟→6 號線→新堂→2 號線→聖水 20min" },
+      { id: "i601-4", time: "13:30", name: "SVT 快閃店", search: "성수동 SEVENTEEN 팝업", transport: "聖水站 3 號出口", fixed: true, highlight: "錨點", note_default: "首爾城東區演武場 13 街 11" },
+      { id: "i601-5", time: "14:30", name: "可頌店 stack.bakerycafe", search: "stack bakerycafe 건대", transport: "建大入口/紫陽站步行 7min", note_default: "광진구 똑섬로 31 길 5" },
+      { id: "i601-6", time: "15:30", name: "洪知秀的麻花甜甜圈", search: "와글와글손만두종합분식", transport: "建大入口 2 號出口走 10min", note_default: "광진구 동일로 10 길 33" },
+      { id: "i601-7", time: "16:30", name: "回飯店休息 + 整理戰利品", transport: "建大入口→2 號線→新堂→6 號線→東廟 25min" },
+      { id: "i601-8", time: "17:30", name: "出發駱山公園", search: "낙산공원", transport: "飯店步行 20min 沿城郭路上山 / 或東廟→4 號線→惠化站 2 號出口走 10min", note_default: "坡度緩、輕鬆段" },
+      { id: "i601-9", time: "18:00", name: "駱山公園夕陽 + 城郭夜景", search: "낙산공원", note_default: "5–6 月日落約 19:40，18:00 到剛好賞夕陽", highlight: "夕陽" },
+      { id: "i601-10", time: "19:30", name: "下山往東大門方向", transport: "步行 15min 下坡到東大門站 / 或惠化站搭 4 號線一站", note_default: "順看惠化大學街" },
+      { id: "i601-11", time: "20:00", name: "晚餐：陳玉華一隻雞", search: "진옥화할매원조닭한마리", transport: "東大門站 3 號出口", note_default: "米其林必比登 / Naver 4.4+", highlight: "必比登" },
+      { id: "i601-12", time: "21:30", name: "DDP 夜景順路走回飯店", search: "DDP 동대문디자인플라자", transport: "步行 10min" },
+      { id: "i601-13", time: "22:00", name: "回飯店" }
+    ],
+    d0602: [
+      { id: "i602-1", time: "09:00", name: "起床、飯店早餐" },
+      { id: "i602-2", time: "10:00", name: "東廟玩具街", search: "동묘 벼룩시장", transport: "飯店步行", note_default: "童心復古商店、카카리코" },
+      { id: "i602-3", time: "11:00", name: "步行三清洞 / 北村韓屋村", search: "북촌한옥마을", transport: "飯店步行 15min / 或東廟→1 號線→鐘閣→步行 20min", note_default: "周一至周六 10:00–17:00（周日公休）" },
+      { id: "i602-4", time: "13:00", name: "太咪推薦麵疙瘩（인사동 항아리 수제비）", search: "인사동 항아리 수제비", transport: "안국역步行", note_default: "11:30–20:40，中間 14:50–17:00 休息！必須 13:30 前點完餐", highlight: "限時" },
+      { id: "i602-5", time: "14:00", name: "Punoya 日式手工布丁店", search: "푸노야 안국", transport: "安國站 2 號出口" },
+      { id: "i602-6", time: "14:30", name: "移動首爾林", transport: "安國→3 號線→玉水→盆唐線→首爾林站 30min" },
+      { id: "i602-7", time: "15:00", name: "首爾林寶可夢限定展", search: "서울숲 포켓몬", transport: "首爾林站 3 號出口", note_default: "5/1–6/21；出發前一週查官方 IG 是否需網路預約", highlight: "限定展" },
+      { id: "i602-8", time: "16:30", name: "首爾林公園散步、玫瑰", transport: "步行", note_default: "如時間夠可從外圍快走過 Dior 區拍幾張不入內" },
+      { id: "i602-9", time: "17:30", name: "中浪玫瑰公園", search: "중랑장미공원", transport: "首爾林→盆唐線→往十里→7 號線→泰陵入口 40min；或巴士 2016/241 直達 35min（無樓梯）", note_default: "泰陵入口站 8 號出口；5–6 月盛開" },
+      { id: "i602-10", time: "19:30", name: "晚餐：回東廟方向", transport: "泰陵入口→6 號線→東廟 20min", note_default: "推薦陳玉華（若 6/1 沒吃）或廣藏市場" },
+      { id: "i602-11", time: "21:00", name: "樂天超市最後採買（若 5/31 已買可省略）" },
+      { id: "i602-12", time: "22:00", name: "回飯店收行李、秤行李、線上報到德威", note_default: "行李秤帶上、德威線上報到 6/2 起；填 e-Arrival Card", highlight: "報到" }
+    ],
+    d0603: [
+      { id: "i603-1", time: "07:30", name: "起床、最後檢查行李" },
+      { id: "i603-2", time: "08:00", name: "早餐：GS25/便利商店外帶" },
+      { id: "i603-3", time: "08:30", name: "退房、出發機場", transport: "東廟→6 號線→青丘→5 號線→金浦 55min / 或計程車 ₩40,000–50,000 三人均攤 NT$300/人" },
+      { id: "i603-4", time: "09:30", name: "抵金浦機場、報到 TW651", transport: "德威 1:30 前須到櫃台", fixed: true },
+      { id: "i603-5", time: "10:50", name: "起飛", fixed: true },
+      { id: "i603-6", time: "12:45", name: "抵高雄", fixed: true }
+    ]
+  },
+  packing: [
+    {
+      id: "pc-digital", title: "出發前數位（5/27 完成）", icon: "📱",
+      items: [
+        { id: "pk-1", name: "K-ETA 申請（出發 72h 內）" },
+        { id: "pk-2", name: "e-Arrival Card 線上填寫" },
+        { id: "pk-3", name: "eSIM 安裝測試" },
+        { id: "pk-4", name: "去程虎航線上報到（5/27 起）" },
+        { id: "pk-5", name: "回程德威線上報到（6/2 起）", note: "晚上回飯店時做" },
+        { id: "pk-6", name: "T-money 已備（或機場便利商店買）" },
+        { id: "pk-7", name: "App：Naver Map / Kakao Map" },
+        { id: "pk-8", name: "App：Kakao T（叫車）" },
+        { id: "pk-9", name: "App：Papago（翻譯）" },
+        { id: "pk-10", name: "Line Pay 韓國活動登錄" }
+      ]
+    },
+    {
+      id: "pc-docs", title: "證件 / 現金", icon: "🛂",
+      items: [
+        { id: "pk-20", name: "護照（效期 > 6 個月）" },
+        { id: "pk-21", name: "護照影本 / 拍照存雲端" },
+        { id: "pk-22", name: "現金 ₩100,000 應急" },
+        { id: "pk-23", name: "信用卡海外刷卡開啟" },
+        { id: "pk-24", name: "演唱會票券 / QR 確認位置" }
+      ]
+    },
+    {
+      id: "pc-tech", title: "行動電子", icon: "🔌",
+      items: [
+        { id: "pk-30", name: "手機" },
+        { id: "pk-31", name: "行動電源 ≥ 20,000mAh" },
+        { id: "pk-32", name: "充電線 × 2（lightning / type-c）" },
+        { id: "pk-33", name: "國際轉接頭（韓國 C 型）" },
+        { id: "pk-34", name: "耳機" }
+      ]
+    },
+    {
+      id: "pc-concert", title: "演唱會（5/29 重點！）", icon: "💎",
+      items: [
+        { id: "pk-40", name: "SHINee 手燈 已充電" },
+        { id: "pk-41", name: "應援棒備用電池" },
+        { id: "pk-42", name: "票券 / QR Code 列印備份" },
+        { id: "pk-43", name: "應援用扇子 / 看板" },
+        { id: "pk-44", name: "演唱會 outfit 服" },
+        { id: "pk-45", name: "舒適好走鞋（蠶室散場走多）" }
+      ]
+    },
+    {
+      id: "pc-clothes", title: "衣物（5 天 + 1）", icon: "👕",
+      items: [
+        { id: "pk-50", name: "上衣 × 6" },
+        { id: "pk-51", name: "褲/裙 × 3" },
+        { id: "pk-52", name: "內衣褲 × 6" },
+        { id: "pk-53", name: "襪子 × 6" },
+        { id: "pk-54", name: "防水外套 / 風衣（5–6 月易陣雨）" },
+        { id: "pk-55", name: "室內服 / 睡衣" },
+        { id: "pk-56", name: "薄圍巾 / 帽子（早晚溫差）" }
+      ]
+    },
+    {
+      id: "pc-toiletry", title: "盥洗 / 藥品", icon: "💊",
+      items: [
+        { id: "pk-60", name: "牙刷牙膏" },
+        { id: "pk-61", name: "保養品分裝" },
+        { id: "pk-62", name: "防曬" },
+        { id: "pk-63", name: "隨身藥（感冒/腸胃/止痛）" },
+        { id: "pk-64", name: "暈車藥（演唱會散場巴士）" },
+        { id: "pk-65", name: "OK 蹦 / 痘痘貼" }
+      ]
+    },
+    {
+      id: "pc-buy", title: "預計採買清單（韓國買）", icon: "🛒",
+      items: [
+        { id: "pk-70", name: "NOVA 藥妝：痘痘貼" },
+        { id: "pk-71", name: "NOVA 藥妝：腸胃藥" },
+        { id: "pk-72", name: "NOVA 藥妝：頭皮噴霧" },
+        { id: "pk-73", name: "Daiso：依清單" },
+        { id: "pk-74", name: "樂天超市：零食/泡麵/咖啡" },
+        { id: "pk-75", name: "明洞龍鬚糖" },
+        { id: "pk-76", name: "Super Coffee 草莓牛奶（現喝）" }
+      ]
+    },
+    {
+      id: "pc-luggage", title: "託運 / 行李工具", icon: "🧳",
+      items: [
+        { id: "pk-80", name: "行李秤（怕超重）" },
+        { id: "pk-81", name: "行李束帶" },
+        { id: "pk-82", name: "摺疊袋 / 購物袋（戰利品）" },
+        { id: "pk-83", name: "防塵套（衣物分裝）" }
+      ]
+    }
+  ]
+};
+
+/* ==================== REGIONS + COORDS ==================== */
+const REGIONS = {
+  airport:     { lat: 37.5586, lng: 126.7944, name: "金浦機場" },
+  hotel:       { lat: 37.5732, lng: 127.0166, name: "DM Hotel / 東廟" },
+  dongdaemun:  { lat: 37.5663, lng: 127.0094, name: "東大門" },
+  gwangjang:   { lat: 37.5704, lng: 127.0008, name: "廣藏市場" },
+  seongsu:     { lat: 37.5447, lng: 127.0557, name: "聖水洞" },
+  kspo:        { lat: 37.5145, lng: 127.0729, name: "KSPO Dome / 蠶室" },
+  yongsan:     { lat: 37.5298, lng: 126.9648, name: "龍山" },
+  hongdae:     { lat: 37.5563, lng: 126.9220, name: "弘大 / 延南" },
+  myeongdong:  { lat: 37.5636, lng: 126.9826, name: "明洞" },
+  mangwon:     { lat: 37.5559, lng: 126.9051, name: "望遠" },
+  seoulstation:{ lat: 37.5547, lng: 126.9707, name: "首爾站" },
+  konkuk:      { lat: 37.5402, lng: 127.0700, name: "建大入口" },
+  naksan:      { lat: 37.5800, lng: 127.0079, name: "駱山公園" },
+  bukchon:     { lat: 37.5826, lng: 126.9837, name: "三清洞 / 北村" },
+  anguk:       { lat: 37.5762, lng: 126.9851, name: "安國 / 仁寺洞" },
+  forest:      { lat: 37.5447, lng: 127.0376, name: "首爾林" },
+  jungnang:    { lat: 37.6168, lng: 127.0790, name: "中浪玫瑰公園" }
+};
+const ITEM_REGIONS = {
+  "i528-1": "airport", "i528-2": "airport", "i528-3": "airport",
+  "i528-4": "myeongdong", "i528-5": "airport", "i528-6": "hotel",
+  "i528-7": "airport", "i528-8": "hotel", "i528-9": "hotel",
+  "i528-10": "dongdaemun", "i528-11": "dongdaemun", "i528-12": "hotel",
+  "i529-1": "hotel", "i529-3": "seongsu", "i529-4": "seongsu",
+  "i529-5": "seongsu", "i529-6": "seongsu", "i529-7": "seongsu",
+  "i529-8": "hotel", "i529-9": "kspo", "i529-10": "kspo", "i529-11": "kspo",
+  "i530-1": "hotel", "i530-2": "yongsan", "i530-3": "yongsan",
+  "i530-5": "hongdae", "i530-6": "hongdae", "i530-7": "hongdae",
+  "i530-8": "hongdae", "i530-9": "hongdae", "i530-10": "hongdae", "i530-11": "hongdae",
+  "i531-1": "mangwon", "i531-3": "myeongdong", "i531-4": "myeongdong",
+  "i531-5": "myeongdong", "i531-6": "myeongdong", "i531-7": "myeongdong",
+  "i531-8": "myeongdong", "i531-9": "seoulstation",
+  "i601-1": "hotel", "i601-2": "hotel", "i601-3": "seongsu",
+  "i601-4": "seongsu", "i601-5": "konkuk", "i601-6": "konkuk", "i601-7": "hotel",
+  "i601-8": "naksan", "i601-9": "naksan", "i601-11": "dongdaemun", "i601-12": "dongdaemun",
+  "i602-1": "hotel", "i602-2": "bukchon", "i602-3": "bukchon",
+  "i602-4": "anguk", "i602-5": "anguk",
+  "i602-7": "forest", "i602-8": "forest", "i602-9": "jungnang", "i602-11": "seoulstation",
+  "i603-3": "airport", "i603-4": "airport", "i603-5": "airport"
+};
+const DAY_COLORS = ["#f59e0b", "#ec4899", "#8b5cf6", "#3b82f6", "#10b981", "#f97316", "#6b7280"];
+
+/* ==================== STATE ==================== */
+const STORAGE_KEY = "seoul2026-data";
+const TOKEN_KEY = "seoul2026-token";
+const GIST_KEY = "seoul2026-gistid";
+const ACTIVE_DAY_KEY = "seoul2026-activeday";
+const SHOW_HIDDEN_KEY = "seoul2026-showhidden";
+const VIEW_KEY = "seoul2026-view";
+const WEATHER_KEY = "seoul2026-weather";
+const WEATHER_TTL = 6 * 3600 * 1000;
+const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=37.5665&longitude=126.978&daily=temperature_2m_max,temperature_2m_min,weather_code,precipitation_probability_max&timezone=Asia%2FSeoul&start_date=2026-05-28&end_date=2026-06-03";
+
+let state = loadLocal();
+let currentDayId = localStorage.getItem(ACTIVE_DAY_KEY) || state.days[0].id;
+let currentView = localStorage.getItem(VIEW_KEY) || "itinerary";
+let showHidden = localStorage.getItem(SHOW_HIDDEN_KEY) === "1";
+let searchTerm = "";
+let pendingSync = false;
+let syncTimer = null;
+let weatherData = null;
+let leafletMap = null;
+let mapMarkers = [];
+let mapDayFilter = "all";
+let packingCollapsed = JSON.parse(localStorage.getItem("seoul2026-pkcollapse") || "{}");
+
+function loadLocal() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return structuredClone(DEFAULT_DATA);
+  try {
+    const parsed = JSON.parse(raw);
+    return mergeWithDefaults(parsed);
+  } catch (e) {
+    console.error("Failed to parse local data, using defaults", e);
+    return structuredClone(DEFAULT_DATA);
+  }
+}
+
+// Merge user data with DEFAULT_DATA so new fields appear without losing user notes/order
+function mergeWithDefaults(user) {
+  const merged = structuredClone(DEFAULT_DATA);
+  if (!user.items) return merged;
+  // Preserve user's per-item state (done, hidden, note, order) and added items
+  for (const dayId of Object.keys(DEFAULT_DATA.items)) {
+    const userItems = user.items[dayId] || [];
+    const defaultItems = DEFAULT_DATA.items[dayId];
+    const userById = Object.fromEntries(userItems.map(i => [i.id, i]));
+    // Use user's order if exists, otherwise default order
+    const userIds = userItems.map(i => i.id);
+    const defaultIds = defaultItems.map(i => i.id);
+    const orderedIds = userIds.length ? userIds : defaultIds;
+    // Add any new default items not yet in user list, append
+    for (const did of defaultIds) {
+      if (!orderedIds.includes(did)) orderedIds.push(did);
+    }
+    merged.items[dayId] = orderedIds.map(id => {
+      const def = defaultItems.find(i => i.id === id);
+      const usr = userById[id];
+      if (!def && !usr) return null;
+      if (!def) {
+        // user-added custom item
+        return { ...usr, _custom: true };
+      }
+      return {
+        ...def,
+        done: usr?.done || false,
+        hidden: usr?.hidden || false,
+        note: usr?.note ?? "",
+        time: usr?.time ?? def.time,
+        name: usr?.name ?? def.name
+      };
+    }).filter(Boolean);
+  }
+  // Merge packing list
+  if (user.packing) {
+    const userCatById = Object.fromEntries(user.packing.map(c => [c.id, c]));
+    merged.packing = merged.packing.map(defCat => {
+      const usrCat = userCatById[defCat.id];
+      if (!usrCat) return defCat;
+      const usrItemById = Object.fromEntries((usrCat.items || []).map(i => [i.id, i]));
+      const defItemIds = defCat.items.map(i => i.id);
+      const usrItemIds = (usrCat.items || []).map(i => i.id);
+      // 一旦使用者動過這個分類，以使用者清單為準（刪除才能持久，不自動補回預設項目）
+      const orderedIds = usrItemIds.length ? usrItemIds : defItemIds;
+      return {
+        ...defCat,
+        items: orderedIds.map(id => {
+          const def = defCat.items.find(i => i.id === id);
+          const usr = usrItemById[id];
+          if (!def && !usr) return null;
+          if (!def) return { ...usr, _custom: true };
+          return {
+            ...def,
+            done: usr?.done || false,
+            name: usr?.name ?? def.name,
+            note: usr?.note ?? def.note ?? ""
+          };
+        }).filter(Boolean)
+      };
+    });
+    // Append user-added custom categories
+    for (const usrCat of user.packing) {
+      if (!merged.packing.find(c => c.id === usrCat.id)) {
+        merged.packing.push({ ...usrCat, _custom: true });
+      }
+    }
+  }
+  return merged;
+}
+
+function saveLocal() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  scheduleSync();
+}
+
+function scheduleSync() {
+  if (!getToken() || !getGistId()) return;
+  pendingSync = true;
+  setSyncStatus("PENDING", "warn");
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => syncToGist(), 1500);
+}
+
+/* ==================== GIST SYNC ==================== */
+function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
+function getGistId() { return localStorage.getItem(GIST_KEY) || ""; }
+
+async function syncToGist() {
+  const token = getToken();
+  const gistId = getGistId();
+  if (!token || !gistId) return;
+  setSyncStatus("SYNCING", "warn");
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      method: "PATCH",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        files: {
+          "seoul-2026.json": { content: JSON.stringify(state, null, 2) }
+        }
+      })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    pendingSync = false;
+    setSyncStatus("SYNCED", "ok");
+  } catch (e) {
+    console.error(e);
+    setSyncStatus("SYNC FAILED", "err");
+  }
+}
+
+async function pullFromGist() {
+  const token = getToken();
+  const gistId = getGistId();
+  if (!token || !gistId) {
+    toast("尚未設定 Token / Gist ID");
+    return;
+  }
+  setSyncStatus("PULLING", "warn");
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/vnd.github+json"
+      }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const file = data.files["seoul-2026.json"];
+    if (!file) throw new Error("Gist 沒有 seoul-2026.json");
+    const content = file.truncated ? await (await fetch(file.raw_url)).text() : file.content;
+    const parsed = JSON.parse(content);
+    state = mergeWithDefaults(parsed);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setSyncStatus("SYNCED", "ok");
+    render();
+    toast("已拉取雲端最新版");
+  } catch (e) {
+    console.error(e);
+    setSyncStatus("PULL FAILED", "err");
+    toast("拉取失敗：" + e.message);
+  }
+}
+
+async function createGist() {
+  const token = getToken();
+  if (!token) {
+    toast("請先輸入 Token");
+    return;
+  }
+  setSyncStatus("CREATING", "warn");
+  try {
+    const res = await fetch("https://api.github.com/gists", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        description: "SHINee 首爾 2026 行程資料",
+        public: false,
+        files: {
+          "seoul-2026.json": { content: JSON.stringify(state, null, 2) }
+        }
+      })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    localStorage.setItem(GIST_KEY, data.id);
+    setSyncStatus("SYNCED", "ok");
+    toast("Gist created: " + data.id);
+    openSettings();
+  } catch (e) {
+    console.error(e);
+    setSyncStatus("CREATE FAILED", "err");
+    toast("建立失敗：" + e.message);
+  }
+}
+
+function setSyncStatus(text, cls) {
+  const el = document.getElementById("sync-status");
+  el.textContent = text;
+  el.className = "sync-pill " + (cls || "");
+}
+
+/* ==================== UI RENDER ==================== */
+function render() {
+  document.body.dataset.view = currentView;
+  document.body.classList.toggle("show-hidden", showHidden);
+  // toggle view containers
+  document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+  document.getElementById("view-" + currentView).classList.add("active");
+  // update bottom nav highlight
+  document.querySelectorAll(".bottom-nav button").forEach(b => {
+    b.classList.toggle("active", b.dataset.view === currentView);
+  });
+  // render whichever view is active
+  if (currentView === "itinerary") {
+    renderDayTabs();
+    renderActiveDay();
+  } else if (currentView === "packing") {
+    renderPacking();
+  } else if (currentView === "map") {
+    renderMap();
+  }
+}
+
+function switchView(view) {
+  currentView = view;
+  localStorage.setItem(VIEW_KEY, view);
+  render();
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+function renderDayTabs() {
+  const nav = document.getElementById("day-tabs");
+  nav.innerHTML = "";
+  state.days.forEach(day => {
+    const btn = document.createElement("button");
+    btn.className = "day-tab" + (day.id === currentDayId ? " active" : "");
+    btn.innerHTML = `<span class="dnum">${day.date}</span>${day.weekday.replace("週", "")}`;
+    btn.onclick = () => {
+      currentDayId = day.id;
+      localStorage.setItem(ACTIVE_DAY_KEY, day.id);
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    nav.appendChild(btn);
+    if (day.id === currentDayId) {
+      setTimeout(() => btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" }), 50);
+    }
+  });
+}
+
+function renderActiveDay() {
+  const day = state.days.find(d => d.id === currentDayId);
+  const items = state.items[currentDayId] || [];
+  const main = document.getElementById("view-itinerary");
+  main.innerHTML = `
+    <div class="day-header">
+      <h1>${day.date} ${day.weekday}</h1>
+      <span class="subtitle">${escapeHtml(day.title)}</span>
+    </div>
+    <div id="weather-slot"></div>
+    <div class="day-summary">${escapeHtml(day.summary)}</div>
+    <div class="cards" id="cards"></div>
+    <button class="add-btn" id="add-btn">+ ADD STOP</button>
+  `;
+  renderWeather(day.date);
+  const cardsEl = document.getElementById("cards");
+  items.forEach(item => cardsEl.appendChild(renderCard(item)));
+  document.getElementById("add-btn").onclick = () => openItemEdit(null);
+
+  // Drag-reorder
+  Sortable.create(cardsEl, {
+    handle: ".drag-handle",
+    animation: 150,
+    ghostClass: "ghost",
+    dragClass: "dragging",
+    onEnd: (evt) => {
+      const list = state.items[currentDayId];
+      const moved = list.splice(evt.oldIndex, 1)[0];
+      list.splice(evt.newIndex, 0, moved);
+      saveLocal();
+    }
+  });
+}
+
+function computeTier(item) {
+  if (item.fixed || (item.highlight && /錨點/.test(item.highlight))) return "anchor";
+  if (item.optional || /如尚|視體力|視當天|\(可選\)|備案|可選/.test(item.name || "")) return "optional";
+  return "default";
+}
+
+function tierTag(tier) {
+  if (tier === "anchor") return "ANCHOR";
+  if (tier === "optional") return "OPTIONAL";
+  return null;
+}
+
+// 若 search 是完整網址（含 naver.me 分享連結）就直接當連結；否則組成 Naver 搜尋連結
+function naverLink(search) {
+  if (!search) return null;
+  const s = search.trim();
+  if (/^https?:\/\//i.test(s)) return s;
+  return `https://map.naver.com/p/search/${encodeURIComponent(s)}`;
+}
+
+function renderCard(item) {
+  const tier = computeTier(item);
+  const div = document.createElement("div");
+  div.className = "card" + (item.hidden ? " hidden-item" : "");
+  div.dataset.id = item.id;
+  div.dataset.tier = tier;
+  div.dataset.done = item.done ? "true" : "false";
+
+  const naverUrl = naverLink(item.search);
+  const noteText = item.note || item.note_default || "";
+  const tag = tierTag(tier) || (item.highlight && !["錨點"].includes(item.highlight) ? item.highlight : null);
+
+  div.innerHTML = `
+    <span class="drag-handle" title="拖曳排序"><svg class="icon icon-sm"><use href="#i-grip-vertical"/></svg></span>
+    <div class="card-row">
+      <span class="card-time">${escapeHtml(item.time || "")}</span>
+      ${tag ? `<span class="card-tag">${escapeHtml(tag)}</span>` : ""}
+      <h3 class="card-name">${highlightSearch(item.name)}</h3>
+      <button class="card-menu-btn" aria-label="選單"><svg class="icon icon-sm"><use href="#i-more-horizontal"/></svg></button>
+    </div>
+    ${item.transport ? `<div class="card-meta">${highlightSearch(item.transport)}</div>` : ""}
+    ${noteText ? `<div class="card-note">${escapeHtml(noteText)}</div>` : ""}
+    <div class="card-actions">
+      ${naverUrl ? `<a class="link-naver" href="${naverUrl}" target="_blank" rel="noopener"><svg class="icon"><use href="#i-map-pin"/></svg>NAVER MAP</a>` : ""}
+      <button class="link-note"><svg class="icon"><use href="#i-pencil"/></svg>${item.note ? "EDIT NOTE" : "ADD NOTE"}</button>
+    </div>
+  `;
+  div.querySelector(".card-menu-btn").onclick = (e) => {
+    e.stopPropagation();
+    openItemMenu(item);
+  };
+  div.querySelector('.link-note').onclick = (e) => {
+    e.stopPropagation();
+    openNoteEdit(item);
+  };
+  return div;
+}
+
+function highlightSearch(text) {
+  const safe = escapeHtml(text || "");
+  if (!searchTerm) return safe;
+  const re = new RegExp(escapeRegex(searchTerm), "gi");
+  return safe.replace(re, m => `<mark class="search-hit-mark">${m}</mark>`);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function escapeRegex(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
+/* ==================== ITEM MENU / EDIT / ADD ==================== */
+function openItemMenu(item) {
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modal-content");
+  content.innerHTML = `
+    <h2>${escapeHtml(item.name)}<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+    <ul class="menu-list">
+      <li data-act="edit"><svg class="icon icon-sm"><use href="#i-pen-line"/></svg>EDIT</li>
+      <li data-act="note"><svg class="icon icon-sm"><use href="#i-pencil"/></svg>${item.note ? "NOTE" : "NOTE"}</li>
+      <li data-act="toggle-hide"><svg class="icon icon-sm"><use href="#i-${item.hidden ? "eye" : "eye-off"}"/></svg>${item.hidden ? "SHOW" : "HIDE"}</li>
+      ${item._custom ? `<li class="danger" data-act="delete"><svg class="icon icon-sm"><use href="#i-trash-2"/></svg>DELETE</li>` : ""}
+    </ul>
+  `;
+  content.querySelector(".close").onclick = closeModal;
+  content.querySelectorAll("[data-act]").forEach(li => {
+    li.onclick = () => {
+      const act = li.dataset.act;
+      closeModal();
+      if (act === "edit") openItemEdit(item);
+      else if (act === "note") openNoteEdit(item);
+      else if (act === "toggle-hide") {
+        item.hidden = !item.hidden;
+        saveLocal();
+        render();
+        toast(item.hidden ? "已隱藏（設定可顯示）" : "已顯示");
+      } else if (act === "delete") {
+        if (confirm("刪除此項目？")) {
+          const arr = state.items[currentDayId];
+          state.items[currentDayId] = arr.filter(i => i.id !== item.id);
+          saveLocal();
+          render();
+        }
+      }
+    };
+  });
+  modal.classList.add("show");
+}
+
+function openNoteEdit(item) {
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modal-content");
+  content.innerHTML = `
+    <h2>NOTE<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+    <div class="field">
+      <label>內容</label>
+      <textarea id="note-input" placeholder="例：跟朋友會合在 X 號出口 / 已買到限定款">${escapeHtml(item.note || "")}</textarea>
+      ${item.note_default ? `<div class="hint">預設提示：${escapeHtml(item.note_default)}</div>` : ""}
+    </div>
+    <div class="btn-row">
+      <button id="cancel">CANCEL</button>
+      <button class="primary" id="save">SAVE</button>
+    </div>
+  `;
+  content.querySelector(".close").onclick = closeModal;
+  content.querySelector("#cancel").onclick = closeModal;
+  content.querySelector("#save").onclick = () => {
+    item.note = content.querySelector("#note-input").value.trim();
+    saveLocal();
+    closeModal();
+    render();
+  };
+  modal.classList.add("show");
+  setTimeout(() => content.querySelector("#note-input").focus(), 100);
+}
+
+function openItemEdit(item) {
+  const isNew = !item;
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modal-content");
+  const data = item || { id: "u" + Date.now(), time: "", name: "", transport: "", search: "", note: "", _custom: true };
+  content.innerHTML = `
+    <h2>${isNew ? "NEW ITEM" : "EDIT ITEM"}<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+    <div class="field"><label>時間</label><input id="f-time" value="${escapeHtml(data.time)}" placeholder="14:00"></div>
+    <div class="field"><label>名稱</label><input id="f-name" value="${escapeHtml(data.name)}" placeholder="店名 / 行程"></div>
+    <div class="field"><label>交通/地點</label><input id="f-tx" value="${escapeHtml(data.transport || "")}" placeholder="2 號出口走 5min"></div>
+    <div class="field"><label>Naver 地點</label><input id="f-search" value="${escapeHtml(data.search || "")}" placeholder="진옥화할매원조닭한마리 或貼 naver.me 連結"><div class="hint">貼 Naver 分享連結（naver.me/...）最準；或填精確韓文店名/地址</div></div>
+    <div class="btn-row">
+      ${isNew ? "" : '<button class="danger" id="del">DELETE</button>'}
+      <button id="cancel">CANCEL</button>
+      <button class="primary" id="save">SAVE</button>
+    </div>
+  `;
+  content.querySelector(".close").onclick = closeModal;
+  content.querySelector("#cancel").onclick = closeModal;
+  content.querySelector("#save").onclick = () => {
+    data.time = content.querySelector("#f-time").value.trim();
+    data.name = content.querySelector("#f-name").value.trim();
+    data.transport = content.querySelector("#f-tx").value.trim();
+    data.search = content.querySelector("#f-search").value.trim();
+    if (!data.name) { toast("請填名稱"); return; }
+    if (isNew) {
+      state.items[currentDayId].push(data);
+      // sort by time if filled
+      state.items[currentDayId].sort((a, b) => (a.time || "99").localeCompare(b.time || "99"));
+    }
+    saveLocal();
+    closeModal();
+    render();
+  };
+  const delBtn = content.querySelector("#del");
+  if (delBtn) {
+    delBtn.onclick = () => {
+      if (confirm("刪除此項目？")) {
+        state.items[currentDayId] = state.items[currentDayId].filter(i => i.id !== data.id);
+        saveLocal();
+        closeModal();
+        render();
+      }
+    };
+  }
+  modal.classList.add("show");
+  setTimeout(() => content.querySelector("#f-time").focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.remove("show");
+}
+
+/* ==================== SETTINGS ==================== */
+function openSettings() {
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modal-content");
+  const token = getToken();
+  const gistId = getGistId();
+  content.innerHTML = `
+    <h2>SETTINGS<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
+
+    <div class="settings-section">
+      <h3>CLOUD SYNC</h3>
+      <div class="field">
+        <label>GitHub Personal Access Token（gist scope）</label>
+        <input type="password" id="set-token" value="${escapeHtml(token)}" placeholder="ghp_…">
+        <div class="hint">建立 token：github.com/settings/tokens → Generate new token (classic) → 勾 gist</div>
+      </div>
+      <div class="field">
+        <label>Gist ID</label>
+        <input id="set-gistid" value="${escapeHtml(gistId)}" placeholder="尚未建立">
+      </div>
+      <div class="btn-row">
+        <button id="btn-create-gist">CREATE GIST</button>
+        <button id="btn-pull">PULL</button>
+        <button class="primary" id="btn-save-cred">SAVE</button>
+      </div>
+      <div class="kv" style="margin-top:10px"><span class="k">STATE</span><span class="v" id="sync-info">${pendingSync ? "PENDING" : (token && gistId ? "READY" : "NOT SET")}</span></div>
+    </div>
+
+    <div class="settings-section">
+      <h3>DISPLAY</h3>
+      <div class="field">
+        <label><input type="checkbox" id="set-hidden" ${showHidden ? "checked" : ""}> 顯示已隱藏的項目</label>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>DATA</h3>
+      <div class="btn-row">
+        <button id="btn-export">EXPORT</button>
+        <button id="btn-import">IMPORT</button>
+      </div>
+      <div class="btn-row">
+        <button class="danger" id="btn-reset">RESET TO DEFAULT</button>
+      </div>
+      <div class="hint" style="margin-top:8px">「重置」會清空所有勾選/備註/排序，僅保留出廠資料。</div>
+    </div>
+
+    <div class="settings-section">
+      <h3>ABOUT</h3>
+      <div class="kv"><span class="k">VERSION</span><span class="v">v${state.schema}</span></div>
+      <div class="kv"><span class="k">ITEMS</span><span class="v">${Object.values(state.items).flat().length}</span></div>
+      <div class="kv"><span class="k">DONE</span><span class="v">${Object.values(state.items).flat().filter(i => i.done).length}</span></div>
+    </div>
+  `;
+  content.querySelector(".close").onclick = closeModal;
+  content.querySelector("#btn-save-cred").onclick = () => {
+    localStorage.setItem(TOKEN_KEY, content.querySelector("#set-token").value.trim());
+    localStorage.setItem(GIST_KEY, content.querySelector("#set-gistid").value.trim());
+    toast("已儲存");
+    setSyncStatus(getToken() && getGistId() ? "READY" : "NOT SET", getToken() && getGistId() ? "ok" : "");
+  };
+  content.querySelector("#btn-create-gist").onclick = async () => {
+    localStorage.setItem(TOKEN_KEY, content.querySelector("#set-token").value.trim());
+    await createGist();
+  };
+  content.querySelector("#btn-pull").onclick = async () => {
+    localStorage.setItem(TOKEN_KEY, content.querySelector("#set-token").value.trim());
+    localStorage.setItem(GIST_KEY, content.querySelector("#set-gistid").value.trim());
+    await pullFromGist();
+    closeModal();
+  };
+  content.querySelector("#set-hidden").onchange = (e) => {
+    showHidden = e.target.checked;
+    localStorage.setItem(SHOW_HIDDEN_KEY, showHidden ? "1" : "0");
+    document.body.classList.toggle("show-hidden", showHidden);
+  };
+  content.querySelector("#btn-export").onclick = () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `seoul-2026-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+  };
+  content.querySelector("#btn-import").onclick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        state = mergeWithDefaults(parsed);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        render();
+        closeModal();
+        toast("已匯入");
+      } catch (e) {
+        toast("匯入失敗：" + e.message);
+      }
+    };
+    input.click();
+  };
+  content.querySelector("#btn-reset").onclick = () => {
+    if (confirm("確定重置？所有勾選、備註、排序都會清空。")) {
+      state = structuredClone(DEFAULT_DATA);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      scheduleSync();
+      render();
+      closeModal();
+      toast("已重置");
+    }
+  };
+  modal.classList.add("show");
+}
+
+/* ==================== WEATHER ==================== */
+async function loadWeather(force) {
+  if (!force) {
+    try {
+      const cached = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null");
+      if (cached && Date.now() - cached.at < WEATHER_TTL) {
+        weatherData = cached.data;
+        return;
+      }
+    } catch (e) {}
+  }
+  try {
+    const res = await fetch(WEATHER_URL);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    weatherData = await res.json();
+    localStorage.setItem(WEATHER_KEY, JSON.stringify({ at: Date.now(), data: weatherData }));
+  } catch (e) {
+    console.error("Weather fetch failed:", e);
+    // keep stale cache if any
+    try {
+      const cached = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null");
+      if (cached) weatherData = cached.data;
+    } catch {}
+  }
+}
+function weatherCodeToIconId(code) {
+  if (code === 0) return "i-sun";
+  if (code === 1 || code === 2) return "i-cloud-sun";
+  if (code === 3) return "i-cloud";
+  if (code >= 45 && code <= 48) return "i-cloud-fog";
+  if (code >= 51 && code <= 57) return "i-cloud-drizzle";
+  if (code >= 61 && code <= 67) return "i-cloud-rain";
+  if (code >= 71 && code <= 77) return "i-cloud-snow";
+  if (code >= 80 && code <= 82) return "i-cloud-rain";
+  if (code >= 85 && code <= 86) return "i-cloud-snow";
+  if (code >= 95) return "i-cloud-lightning";
+  return "i-cloud";
+}
+function weatherCodeToText(code) {
+  if (code === 0) return "晴";
+  if (code === 1 || code === 2) return "局部多雲";
+  if (code === 3) return "陰";
+  if (code >= 45 && code <= 48) return "霧";
+  if (code >= 51 && code <= 57) return "毛毛雨";
+  if (code >= 61 && code <= 67) return "雨";
+  if (code >= 71 && code <= 77) return "雪";
+  if (code >= 80 && code <= 82) return "陣雨";
+  if (code >= 85 && code <= 86) return "陣雪";
+  if (code >= 95) return "雷雨";
+  return "—";
+}
+function renderWeather(dateStr) {
+  const slot = document.getElementById("weather-slot");
+  if (!slot) return;
+  if (!weatherData || !weatherData.daily) {
+    slot.innerHTML = `<div class="weather-card loading"><div class="w-main"><svg class="icon icon-md w-icon"><use href="#i-cloud"/></svg><span class="w-temp">—</span><span class="w-text">載入中…</span></div></div>`;
+    loadWeather().then(() => {
+      if (document.getElementById("weather-slot")) renderWeather(dateStr);
+    });
+    return;
+  }
+  const [mo, d] = dateStr.split("/");
+  const target = `2026-${mo.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  const idx = weatherData.daily.time.indexOf(target);
+  if (idx === -1) { slot.innerHTML = ""; return; }
+  const hi = Math.round(weatherData.daily.temperature_2m_max[idx]);
+  const lo = Math.round(weatherData.daily.temperature_2m_min[idx]);
+  const code = weatherData.daily.weather_code[idx];
+  const pop = weatherData.daily.precipitation_probability_max[idx];
+  const iconId = weatherCodeToIconId(code);
+  const text = weatherCodeToText(code);
+  const popHtml = pop != null ? `<span class="w-pop">降雨 ${pop}%</span>` : "";
+  const warnTag = pop != null && pop >= 60 ? `<span class="w-warn-tag">BRING UMBRELLA</span>` : "";
+
+  // last updated
+  let updated = "";
+  try {
+    const cached = JSON.parse(localStorage.getItem(WEATHER_KEY) || "null");
+    if (cached) {
+      const mins = Math.round((Date.now() - cached.at) / 60000);
+      updated = mins < 1 ? "Updated just now" : `Updated ${mins} min ago`;
+    }
+  } catch {}
+
+  // long-range warning
+  const today = new Date();
+  const targetDate = new Date(target);
+  const daysAhead = Math.round((targetDate - today) / 86400000);
+  const longRange = daysAhead > 5
+    ? `<div class="w-source warn">Long-range — verify closer to date</div>`
+    : `<div class="w-source">Data: Open-Meteo (ECMWF) — accuracy decreases over time</div>`;
+
+  slot.innerHTML = `<div class="weather-card" id="weather-card">
+    <div class="w-main">
+      <svg class="icon icon-lg w-icon"><use href="#${iconId}"/></svg>
+      <span class="w-temp">${lo}° / ${hi}°</span>
+      <span class="w-text">${text}</span>
+      ${popHtml}
+      ${warnTag}
+    </div>
+    <div class="w-meta">
+      <a href="https://www.weather.go.kr/w/weather/forecast/short-term.do" target="_blank" rel="noopener">KMA</a>
+      <a href="https://m.weather.naver.com" target="_blank" rel="noopener">NAVER</a>
+      <span class="w-updated">${updated}</span>
+    </div>
+    ${longRange}
+  </div>`;
+  document.getElementById("weather-card").onclick = async (e) => {
+    if (e.target.tagName === "A") return;
+    const card = document.getElementById("weather-card");
+    card.classList.add("loading");
+    await loadWeather(true);
+    renderWeather(dateStr);
+  };
+}
+
+/* ==================== PACKING ==================== */
+function renderPacking() {
+  const main = document.getElementById("view-packing");
+  const all = state.packing.flatMap(c => c.items);
+  const done = all.filter(i => i.done).length;
+  const total = all.length;
+  let html = `
+    <div class="packing-header">
+      <h1>PACKING</h1>
+      <span class="progress">${done} / ${total} COMPLETE</span>
+    </div>
+  `;
+  state.packing.forEach(cat => {
+    const catDone = cat.items.filter(i => i.done).length;
+    const catTotal = cat.items.length;
+    const isComplete = catDone === catTotal && catTotal > 0;
+    const collapsed = packingCollapsed[cat.id] === true;
+    html += `<div class="pack-cat${collapsed ? " collapsed" : ""}" data-cat="${cat.id}">
+      <div class="pack-cat-head">
+        <span>${escapeHtml(cat.title.toUpperCase())}</span>
+        <span>
+          <span class="pct-progress${isComplete ? " done" : ""}">${catDone}/${catTotal}</span>
+          <span class="chev"><svg class="icon icon-sm"><use href="#i-chevron-down"/></svg></span>
+        </span>
+      </div>
+      <ul class="pack-items">
+        ${cat.items.map(it => `
+          <li class="pack-item${it.done ? " done" : ""}" data-id="${it.id}">
+            <button class="pack-cb${it.done ? " checked" : ""}" aria-label="勾選">${it.done ? '<svg class="icon icon-sm"><use href="#i-check"/></svg>' : ""}</button>
+            <span class="pack-name">${escapeHtml(it.name)}${it.note ? ` <span class="pack-note">— ${escapeHtml(it.note)}</span>` : ""}</span>
+            <button class="pack-delete" data-del="${it.id}" aria-label="刪除"><svg class="icon icon-sm"><use href="#i-trash-2"/></svg></button>
+          </li>
+        `).join("")}
+      </ul>
+      <div class="pack-add">
+        <input type="text" placeholder="新增物品…" data-add-input="${cat.id}">
+        <button data-add-btn="${cat.id}"><svg class="icon icon-sm"><use href="#i-plus"/></svg></button>
+      </div>
+    </div>`;
+  });
+  main.innerHTML = html;
+
+  // Wire up
+  main.querySelectorAll(".pack-cat-head").forEach(head => {
+    head.onclick = () => {
+      const cat = head.parentElement;
+      const catId = cat.dataset.cat;
+      cat.classList.toggle("collapsed");
+      packingCollapsed[catId] = cat.classList.contains("collapsed");
+      localStorage.setItem("seoul2026-pkcollapse", JSON.stringify(packingCollapsed));
+    };
+  });
+  main.querySelectorAll(".pack-cb").forEach(cb => {
+    cb.onclick = (e) => {
+      e.stopPropagation();
+      const li = cb.closest(".pack-item");
+      const itemId = li.dataset.id;
+      const cat = state.packing.find(c => c.items.find(i => i.id === itemId));
+      const item = cat.items.find(i => i.id === itemId);
+      item.done = !item.done;
+      saveLocal();
+      renderPacking();
+    };
+  });
+  main.querySelectorAll("[data-del]").forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const itemId = btn.dataset.del;
+      const cat = state.packing.find(c => c.items.find(i => i.id === itemId));
+      cat.items = cat.items.filter(i => i.id !== itemId);
+      saveLocal();
+      renderPacking();
+    };
+  });
+  main.querySelectorAll("[data-add-btn]").forEach(btn => {
+    btn.onclick = () => {
+      const catId = btn.dataset.addBtn;
+      const input = main.querySelector(`[data-add-input="${catId}"]`);
+      const name = input.value.trim();
+      if (!name) return;
+      const cat = state.packing.find(c => c.id === catId);
+      cat.items.push({ id: "pu" + Date.now(), name, _custom: true });
+      saveLocal();
+      renderPacking();
+    };
+  });
+  main.querySelectorAll("[data-add-input]").forEach(input => {
+    input.onkeydown = (e) => {
+      if (e.key === "Enter") {
+        const btn = main.querySelector(`[data-add-btn="${input.dataset.addInput}"]`);
+        btn.click();
+      }
+    };
+  });
+}
+
+/* ==================== MAP ==================== */
+function renderMap() {
+  const main = document.getElementById("view-map");
+  if (!main.querySelector("#leaflet-map")) {
+    let chips = `<button class="map-day-chip all${mapDayFilter === "all" ? " active" : ""}" data-day="all">ALL</button>`;
+    chips += state.days.map((d, i) =>
+      `<button class="map-day-chip${mapDayFilter === d.id ? " active" : ""}" data-day="${d.id}">${d.date}</button>`
+    ).join("");
+    const legend = `<span>Tap a date to focus · ${state.days.length} days · ${Object.keys(ITEM_REGIONS).length} pins</span>`;
+    main.innerHTML = `
+      <div class="map-controls">${chips}</div>
+      <div id="leaflet-map"></div>
+      <div class="map-legend">${legend}</div>
+    `;
+    main.querySelectorAll(".map-day-chip").forEach(chip => {
+      chip.onclick = () => {
+        mapDayFilter = chip.dataset.day;
+        renderMap();
+      };
+    });
+  } else {
+    // refresh just chips
+    main.querySelectorAll(".map-day-chip").forEach(chip => {
+      chip.classList.toggle("active", chip.dataset.day === mapDayFilter);
+    });
+  }
+
+  if (typeof L === "undefined") {
+    document.getElementById("leaflet-map").innerHTML = '<div style="padding:20px;text-align:center;color:#6b6b6b">地圖元件載入中…</div>';
+    setTimeout(renderMap, 600);
+    return;
+  }
+
+  // Init map once
+  if (!leafletMap) {
+    leafletMap = L.map("leaflet-map", {
+      zoomControl: true,
+      attributionControl: true
+    }).setView([37.5665, 126.978], 12);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(leafletMap);
+    // hotel always shown
+    const h = REGIONS.hotel;
+    L.marker([h.lat, h.lng], { title: "🏨 DM Hotel" })
+      .bindPopup("<b>🏨 DM Hotel</b><br>東廟站旁")
+      .addTo(leafletMap);
+  } else {
+    // ensure size correct (in case container was hidden)
+    setTimeout(() => leafletMap.invalidateSize(), 50);
+  }
+
+  // Clear old markers
+  mapMarkers.forEach(m => leafletMap.removeLayer(m));
+  mapMarkers = [];
+
+  // Add markers per filter
+  const regionCounters = {};
+  state.days.forEach((day, dayIdx) => {
+    if (mapDayFilter !== "all" && mapDayFilter !== day.id) return;
+    // 顏色策略：
+    //  - all-mode：全 ink 黑
+    //  - single-day：當日 accent 綠
+    const fillColor = (mapDayFilter === "all") ? "#1A1A1A" : "#79E5CB";
+    const strokeColor = "#FFFFFF";
+
+    (state.items[day.id] || []).forEach(item => {
+      if (item.hidden) return;
+      const regionKey = ITEM_REGIONS[item.id];
+      if (!regionKey) return;
+      const r = REGIONS[regionKey];
+      regionCounters[regionKey] = (regionCounters[regionKey] || 0) + 1;
+      const n = regionCounters[regionKey] - 1;
+      const offset = 0.0008;
+      const lat = r.lat + Math.cos(n * 1.3) * offset * (1 + n * 0.3);
+      const lng = r.lng + Math.sin(n * 1.3) * offset * (1 + n * 0.3);
+      const marker = L.circleMarker([lat, lng], {
+        radius: 8, color: strokeColor, weight: 2,
+        fillColor, fillOpacity: 0.95
+      }).addTo(leafletMap);
+      const naverUrl = naverLink(item.search);
+      marker.bindPopup(`
+        <b><span class="pop-time">${escapeHtml(item.time || "")}</span>${escapeHtml(item.name)}</b>
+        <div class="pop-day">${day.date} ${day.weekday} · ${r.name}</div>
+        ${naverUrl ? `<a href="${naverUrl}" target="_blank">NAVER MAP</a>` : ""}
+      `);
+      mapMarkers.push(marker);
+    });
+  });
+
+  // Fit bounds to visible markers if filtered to single day
+  if (mapDayFilter !== "all" && mapMarkers.length) {
+    const group = L.featureGroup(mapMarkers);
+    leafletMap.fitBounds(group.getBounds().pad(0.3));
+  } else if (mapDayFilter === "all") {
+    leafletMap.setView([37.5665, 126.978], 12);
+  }
+}
+
+/* ==================== MISC ==================== */
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2400);
+}
+
+/* ==================== EVENT BINDINGS ==================== */
+document.getElementById("settings-btn").onclick = openSettings;
+document.getElementById("search-toggle").onclick = () => {
+  const box = document.getElementById("search-box");
+  box.classList.toggle("show");
+  if (box.classList.contains("show")) {
+    setTimeout(() => document.getElementById("search-input").focus(), 100);
+  } else {
+    searchTerm = "";
+    document.getElementById("search-input").value = "";
+    render();
+  }
+};
+document.getElementById("search-input").addEventListener("input", (e) => {
+  searchTerm = e.target.value.trim();
+  if (!searchTerm) { render(); return; }
+  // search across all days, jump to first hit
+  for (const day of state.days) {
+    const items = state.items[day.id] || [];
+    const hit = items.find(i =>
+      (i.name && i.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (i.transport && i.transport.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (i.note && i.note.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    if (hit) {
+      currentDayId = day.id;
+      if (currentView !== "itinerary") {
+        currentView = "itinerary";
+        localStorage.setItem(VIEW_KEY, "itinerary");
+      }
+      render();
+      setTimeout(() => {
+        const el = document.querySelector(`[data-id="${hit.id}"]`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+      return;
+    }
+  }
+});
+document.getElementById("modal").addEventListener("click", (e) => {
+  if (e.target.id === "modal") closeModal();
+});
+
+document.querySelectorAll(".bottom-nav button").forEach(btn => {
+  btn.onclick = () => switchView(btn.dataset.view);
+});
+
+/* ==================== INIT ==================== */
+if (getToken() && getGistId()) setSyncStatus("READY", "ok");
+render();
+// kick off weather fetch (non-blocking; renderWeather handles re-render)
+loadWeather().then(() => {
+  if (currentView === "itinerary") {
+    const day = state.days.find(d => d.id === currentDayId);
+    if (day) renderWeather(day.date);
+  }
+});
+
+/* Pull on first load if creds set */
+if (getToken() && getGistId() && !localStorage.getItem(STORAGE_KEY)) {
+  pullFromGist();
+}
+</script>
+
+</body>
+</html>
