@@ -305,6 +305,9 @@ main { padding: 16px 12px 24px; max-width: 720px; margin: 0 auto; }
 .add-btn:hover { color: var(--accent); }
 
 /* Modal */
+body.modal-open { overflow: hidden; }
+body.modal-open .bottom-nav { display: none; }
+
 .modal-backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.4);
   display: none; align-items: flex-end; justify-content: center;
@@ -1551,6 +1554,7 @@ function openItemMenu(item) {
     };
   });
   modal.classList.add("show");
+  document.body.classList.add("modal-open");
 }
 
 function openNoteEdit(item) {
@@ -1577,6 +1581,7 @@ function openNoteEdit(item) {
     render();
   };
   modal.classList.add("show");
+  document.body.classList.add("modal-open");
   setTimeout(() => content.querySelector("#note-input").focus(), 100);
 }
 
@@ -1626,11 +1631,13 @@ function openItemEdit(item) {
     };
   }
   modal.classList.add("show");
+  document.body.classList.add("modal-open");
   setTimeout(() => content.querySelector("#f-time").focus(), 100);
 }
 
 function closeModal() {
   document.getElementById("modal").classList.remove("show");
+  document.body.classList.remove("modal-open");
 }
 
 /* ==================== SETTINGS ==================== */
@@ -1747,6 +1754,7 @@ function openSettings() {
     }
   };
   modal.classList.add("show");
+  document.body.classList.add("modal-open");
 }
 
 /* ==================== WEATHER ==================== */
