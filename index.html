@@ -1544,7 +1544,7 @@ function openItemMenu(item) {
         render();
         toast(item.hidden ? "已隱藏（設定可顯示）" : "已顯示");
       } else if (act === "delete") {
-        if (confirm("刪除此項目？")) {
+        if (confirm(`確定刪除「${item.name}」？`)) {
           const arr = state.items[currentDayId];
           state.items[currentDayId] = arr.filter(i => i.id !== item.id);
           saveLocal();
@@ -1622,7 +1622,7 @@ function openItemEdit(item) {
   const delBtn = content.querySelector("#del");
   if (delBtn) {
     delBtn.onclick = () => {
-      if (confirm("刪除此項目？")) {
+      if (confirm(`確定刪除「${data.name}」？`)) {
         state.items[currentDayId] = state.items[currentDayId].filter(i => i.id !== data.id);
         saveLocal();
         closeModal();
