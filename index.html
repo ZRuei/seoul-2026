@@ -847,7 +847,6 @@ body[data-view="map"] nav.day-tabs { display: none; }
 
 <nav class="bottom-nav">
   <button data-view="itinerary" class="active"><svg class="icon icon-md"><use href="#i-calendar"/></svg><span class="nlabel">行程</span></button>
-  <button data-view="packing"><svg class="icon icon-md"><use href="#i-backpack"/></svg><span class="nlabel">行李</span></button>
   <button data-view="map"><svg class="icon icon-md"><use href="#i-map"/></svg><span class="nlabel">地圖</span></button>
 </nav>
 
@@ -1142,7 +1141,7 @@ const STORAGE_KEY = "seoul2026-data";
 const TOKEN_KEY = "seoul2026-token";
 const GIST_KEY = "seoul2026-gistid";
 const BACKUP_KEY = "seoul2026-backup";
-const APP_VERSION = "2026-05-27 v10 (search-fix)";
+const APP_VERSION = "2026-05-27 v11 (remove-packing-tab)";
 const ACTIVE_DAY_KEY = "seoul2026-activeday";
 const SHOW_HIDDEN_KEY = "seoul2026-showhidden";
 const VIEW_KEY = "seoul2026-view";
@@ -1153,6 +1152,7 @@ const WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=37.5665&lon
 let state = loadLocal();
 let currentDayId = localStorage.getItem(ACTIVE_DAY_KEY) || state.days[0].id;
 let currentView = localStorage.getItem(VIEW_KEY) || "itinerary";
+if (currentView === "packing") currentView = "itinerary";
 let showHidden = localStorage.getItem(SHOW_HIDDEN_KEY) === "1";
 let searchTerm = "";
 let pendingSync = false;
