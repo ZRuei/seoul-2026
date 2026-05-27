@@ -1141,6 +1141,7 @@ const DAY_COLORS = ["#f59e0b", "#ec4899", "#8b5cf6", "#3b82f6", "#10b981", "#f97
 const STORAGE_KEY = "seoul2026-data";
 const TOKEN_KEY = "seoul2026-token";
 const GIST_KEY = "seoul2026-gistid";
+const BACKUP_KEY = "seoul2026-backup";
 const ACTIVE_DAY_KEY = "seoul2026-activeday";
 const SHOW_HIDDEN_KEY = "seoul2026-showhidden";
 const VIEW_KEY = "seoul2026-view";
@@ -1297,6 +1298,23 @@ async function pullFromGist() {
     toast("尚未設定 Token / Gist ID");
     return;
   }
+  // 防呆 1：若本地有未同步修改，先推上去，避免遺失
+  if (pendingSync) {
+    clearTimeout(syncTimer);
+    toast("先把本地修改上傳…");
+    await syncToGist();
+  }
+  // 防呆 2：明確 confirm（避免誤觸）
+  if (!confirm("拉取雲端會用雲端版本覆蓋本地，確定要拉取？\n（拉取前會自動備份，可在「資料」區還原）")) {
+    return;
+  }
+  // 防呆 3：拉之前先存一份本地備份
+  try {
+    localStorage.setItem(BACKUP_KEY, JSON.stringify({
+      at: Date.now(),
+      state: state
+    }));
+  } catch {}
   setSyncStatus("PULLING", "warn");
   try {
     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
@@ -1315,7 +1333,7 @@ async function pullFromGist() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     setSyncStatus("SYNCED", "ok");
     render();
-    toast("已拉取雲端最新版");
+    toast("已拉取雲端版本（可在「資料」區還原）");
   } catch (e) {
     console.error(e);
     setSyncStatus("PULL FAILED", "err");
@@ -1646,6 +1664,14 @@ function openSettings() {
   const content = document.getElementById("modal-content");
   const token = getToken();
   const gistId = getGistId();
+  let backupInfo = "";
+  try {
+    const b = JSON.parse(localStorage.getItem(BACKUP_KEY) || "null");
+    if (b && b.at) {
+      const mins = Math.round((Date.now() - b.at) / 60000);
+      backupInfo = mins < 1 ? "剛剛" : (mins < 60 ? `${mins} 分鐘前` : `${Math.round(mins/60)} 小時前`);
+    }
+  } catch {}
   content.innerHTML = `
     <h2>設定<button class="close" aria-label="關閉"><svg class="icon icon-md"><use href="#i-x"/></svg></button></h2>
 
@@ -1679,6 +1705,9 @@ function openSettings() {
       <div class="btn-row">
         <button id="btn-export">匯出</button>
         <button id="btn-import">匯入</button>
+      </div>
+      <div class="btn-row">
+        <button id="btn-restore">${backupInfo ? `還原拉取前狀態（${backupInfo}）` : "無可還原備份"}</button>
       </div>
       <div class="btn-row">
         <button class="danger" id="btn-reset">重置為預設</button>
@@ -1743,6 +1772,30 @@ function openSettings() {
     };
     input.click();
   };
+  const restoreBtn = content.querySelector("#btn-restore");
+  if (restoreBtn) {
+    if (!backupInfo) {
+      restoreBtn.disabled = true;
+      restoreBtn.style.opacity = "0.4";
+      restoreBtn.style.cursor = "not-allowed";
+    }
+    restoreBtn.onclick = () => {
+      if (!backupInfo) return;
+      if (!confirm(`還原到拉取前狀態？\n（備份時間：${backupInfo}）`)) return;
+      try {
+        const b = JSON.parse(localStorage.getItem(BACKUP_KEY) || "null");
+        if (!b || !b.state) { toast("找不到備份"); return; }
+        state = mergeWithDefaults(b.state);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        scheduleSync();
+        render();
+        closeModal();
+        toast("已還原拉取前狀態");
+      } catch (e) {
+        toast("還原失敗：" + e.message);
+      }
+    };
+  }
   content.querySelector("#btn-reset").onclick = () => {
     if (confirm("確定重置？所有勾選、備註、排序都會清空。")) {
       state = structuredClone(DEFAULT_DATA);
