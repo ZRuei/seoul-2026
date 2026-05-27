@@ -1142,6 +1142,7 @@ const STORAGE_KEY = "seoul2026-data";
 const TOKEN_KEY = "seoul2026-token";
 const GIST_KEY = "seoul2026-gistid";
 const BACKUP_KEY = "seoul2026-backup";
+const APP_VERSION = "2026-05-27 v10 (search-fix)";
 const ACTIVE_DAY_KEY = "seoul2026-activeday";
 const SHOW_HIDDEN_KEY = "seoul2026-showhidden";
 const VIEW_KEY = "seoul2026-view";
@@ -1722,7 +1723,8 @@ function openSettings() {
 
     <div class="settings-section">
       <h3>關於</h3>
-      <div class="kv"><span class="k">版本</span><span class="v">v${state.schema}</span></div>
+      <div class="kv"><span class="k">App 版本</span><span class="v">${APP_VERSION}</span></div>
+      <div class="kv"><span class="k">資料版本</span><span class="v">v${state.schema}</span></div>
       <div class="kv"><span class="k">項目數</span><span class="v">${Object.values(state.items).flat().length}</span></div>
       <div class="kv"><span class="k">已完成</span><span class="v">${Object.values(state.items).flat().filter(i => i.done).length}</span></div>
     </div>
